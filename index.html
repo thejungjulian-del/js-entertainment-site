@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS ENTERTAINMENT®</title>
+<meta name="description" content="JS Entertainment builds and operates groups. One aesthetic and one discipline each. A Loud Peace is first on the roster.">
+<style>
+/* ============================================================
+   JS ENTERTAINMENT — paper edition
+   White majority, black accents. Hairline construction grid,
+   crop marks, grain, one dominant logotype. Chrome objects come
+   from a hand-rolled software 3D renderer (no dependencies),
+   shaded against a bright environment so they read on paper.
+   ============================================================ */
+:root{
+  --paper:#f5f5f3;
+  --paper-2:#efefec;
+  --ink:#0b0b0c;
+  --ink-2:#4c4e50;
+  --ink-3:#8a8c8e;
+  --ink-4:#b9bbbc;
+  --rule:rgba(11,11,12,.07);
+  --rule-2:rgba(11,11,12,.16);
+  --pad:clamp(18px,3.6vw,44px);
+  --mono:"SF Mono",ui-monospace,"Roboto Mono",Menlo,monospace;
+  --grot:"Helvetica Neue",Inter,Arial,sans-serif;
+  --cols:9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--grot);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:var(--ink);color:var(--paper)}
+
+/* ---------- the construction grid: fixed hairline columns ---------- */
+.grid{
+  /* ONE layer, at the very BACK. Content blocks sit on opaque paper, so the
+     rules read as a ground the page rests on rather than crossing the type. */
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(to right,var(--rule) 0 1px,transparent 1px);
+  background-size:calc(100% / var(--cols)) 100%;
+}
+/* ---------- grain, multiplied onto the paper ---------- */
+.grain{
+  position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.30;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:start;
+  padding:var(--pad);gap:22px;
+  transition:background .4s,backdrop-filter .4s;
+}
+.bar.on{background:rgba(245,245,243,.86);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule)}
+.lock{text-decoration:none;color:var(--ink);justify-self:start}
+.lock .a{font-weight:700;font-size:14px;letter-spacing:-.01em;line-height:1.05}
+.lock .b{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:3px}
+.nav{justify-self:center;display:flex;gap:clamp(18px,3vw,44px);padding-top:2px}
+.nav a{font-size:11.5px;letter-spacing:.02em;color:var(--ink);text-decoration:none;
+  position:relative;padding-bottom:2px}
+.nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
+  background:var(--ink);transition:right .35s cubic-bezier(.2,.8,.2,1)}
+.nav a:hover::after,.nav a.here::after{right:0}
+.nav a.here{font-weight:500}
+
+/* keyboard focus — was missing entirely */
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:1.5px solid var(--ink);outline-offset:3px}
+.card:focus-visible{outline:1.5px solid var(--ink);outline-offset:-1px}
+.sq{justify-self:end;width:9px;height:9px;background:var(--ink);margin-top:4px}
+@media(max-width:820px){.nav{display:none}.bar{grid-template-columns:1fr auto}}
+
+/* ---------- corner marginalia ---------- */
+.marg{position:absolute;z-index:6;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-2);line-height:1.85;
+  pointer-events:none}
+.marg.tr{top:calc(var(--pad) + 50px);right:var(--pad);text-align:right}
+.marg.bl{bottom:var(--pad);left:var(--pad);display:flex;align-items:flex-end;gap:9px}
+.marg.bl .big{font-family:var(--grot);font-weight:700;font-size:30px;letter-spacing:-.03em;
+  line-height:.78;color:var(--ink)}
+.marg.br{bottom:var(--pad);right:var(--pad);text-align:right;pointer-events:auto}
+.marg.br a{color:var(--ink-2);text-decoration:none;display:block}
+.marg.br a:hover{color:var(--ink)}
+@media(max-width:820px){.marg.tr{display:none}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;overflow:hidden}
+#stage{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2}
+/* crop marks — thin rules boxing the subject, run to the frame edge */
+/* below the canvas — at z-index 3 these drew straight over the solid */
+.crop{position:absolute;inset:0;z-index:1;pointer-events:none}
+.crop i{position:absolute;background:var(--rule-2)}
+.crop i.v{top:0;bottom:0;width:1px}
+.crop i.h{left:0;right:0;height:1px}
+/* the logotype, laid across the object */
+.logo{
+  position:absolute;z-index:4;left:0;right:0;top:50%;transform:translateY(-50%);
+  text-align:center;pointer-events:none;padding:0 var(--pad);
+}
+.logo h1{
+  font-weight:700;font-size:min(8.6vw,120px);letter-spacing:-.045em;line-height:.9;
+  display:inline-block;white-space:nowrap;position:relative;
+}
+/* the ® hangs outside the box so the WORDMARK is what gets centred, not
+   wordmark-plus-mark — otherwise the type reads as sitting left of centre */
+.logo h1 sup{position:absolute;left:100%;top:.06em;font-size:.24em;letter-spacing:0;
+  margin-left:.06em;font-weight:400}
+.under{
+  position:absolute;z-index:6;left:0;right:0;bottom:13%;
+  text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--ink-2);pointer-events:none;
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* a second copy of the logotype, clipped, so the object passes through it */
+.logo.front{z-index:5;clip-path:inset(0 0 47% 0)}
+@media(max-width:820px){.logo h1{font-size:min(12.6vw,64px)}}
+
+.cue{position:absolute;bottom:var(--pad);left:50%;transform:translateX(-50%);z-index:6;
+  display:flex;flex-direction:column;align-items:center;gap:9px;text-decoration:none;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);transition:color .3s}
+.cue:hover{color:var(--ink)}
+.cue i{width:1px;height:26px;background:currentColor;transform-origin:top;
+  animation:drop 2.4s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes drop{0%{transform:scaleY(0)}45%{transform:scaleY(1)}
+  55%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+@media(max-width:820px){.cue{display:none}}
+
+/* ---------- section shell ---------- */
+section{padding:clamp(72px,10vh,140px) var(--pad);position:relative;z-index:2;
+  scroll-margin-top:80px}
+.hr{position:relative}
+.hr::before,.band::before,footer::before{
+  content:"";position:absolute;top:0;left:var(--pad);right:var(--pad);
+  height:1px;background:var(--rule-2);
+}
+.head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;
+  gap:20px;margin-bottom:48px}
+.head h2{font-weight:700;font-size:clamp(28px,5vw,68px);letter-spacing:-.038em;line-height:.9}
+.head .sub{font-family:var(--mono);font-size:9px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--ink-3);line-height:1.95;text-align:right}
+.eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:20px}
+@media(max-width:760px){.head .sub{text-align:left}}
+
+
+/* ---------- the oversized word band ---------- */
+.band{position:relative;overflow:hidden;padding:clamp(56px,9vh,120px) 0 0;z-index:2}
+.band .word{
+  font-weight:700;font-size:min(27vw,368px);letter-spacing:-.058em;line-height:1.0;
+  white-space:nowrap;padding:0 var(--pad);
+}
+.band .cap{padding:0 var(--pad) clamp(40px,7vh,90px);display:flex;justify-content:space-between;
+  align-items:flex-start;gap:24px;flex-wrap:wrap;font-family:var(--mono);font-size:9px;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3);margin-top:clamp(26px,4vh,48px)}
+.band .cap p{max-width:46ch;line-height:1.9;color:var(--ink-2)}
+
+/* ---------- roster ---------- */
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule-2);
+  border-left:1px solid var(--rule-2);background:var(--paper);position:relative;z-index:2}
+@media(max-width:1080px){.rgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr}}
+.card{
+  background:var(--paper);
+  position:relative;border-right:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2);
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;
+  transition:background .4s;
+}
+.card:hover{background:var(--paper-2)}
+.card .art{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--paper)}
+.card .art canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.card .no{position:absolute;top:14px;left:16px;z-index:2;font-family:var(--mono);
+  font-size:8.5px;letter-spacing:.2em;color:var(--ink-3)}
+.card .st{position:absolute;top:14px;right:16px;z-index:2;font-family:var(--mono);
+  font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);
+  border:1px solid var(--rule-2);padding:3px 8px;background:var(--paper)}
+.card .st.live{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.card .bd{padding:22px 20px 24px;display:flex;flex-direction:column;gap:10px;flex:1;
+  border-top:1px solid var(--rule)}
+.card .nm{font-weight:700;font-size:clamp(18px,1.8vw,25px);letter-spacing:-.028em;line-height:1}
+.card .dis{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink)}
+.card .ae{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);line-height:1.8}
+.card .go{margin-top:auto;font-family:var(--mono);font-size:9px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:8px;
+  transition:gap .3s}
+.card:hover .go{gap:14px}
+.card[href] .go{border-bottom:1px solid var(--rule-2);padding-bottom:7px}
+.card[href]:hover .go{border-bottom-color:var(--ink-3)}
+.card.soon .nm,.card.soon .go{color:var(--ink-4)}
+.card.soon{cursor:default}
+
+/* ---------- pillars: one repeating row, index / text / plate ---------- */
+.pillars{display:flex;flex-direction:column;border-bottom:1px solid var(--rule-2)}
+.pil{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(22px,4vw,64px);align-items:center;
+  padding:clamp(28px,4.2vh,52px) 0;border-top:1px solid var(--rule-2);
+}
+.pil .txt{max-width:46ch}
+.pil h3{font-weight:700;font-size:clamp(24px,3.4vw,44px);letter-spacing:-.038em;
+  line-height:.96;margin-bottom:14px}
+.pil p{font-size:13.5px;line-height:1.68;color:var(--ink-2)}
+/* Operate is mirrored — the plate takes the left column. The widths swap with
+   it so the text column is the same size as in the other rows, and the type
+   stays left-aligned, so only the side changes. */
+.pil.flip{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.pil.flip .art{order:1}
+.pil.flip .txt{order:2}
+/* a true mirror: the text hugs the right margin and rags left, and the
+   plate's registration tick moves to the opposite end */
+.pil.flip .txt{margin-left:auto;text-align:right}
+.pil.flip .art .cap{text-align:right}
+.pil .art{position:relative}
+.pil .art canvas{display:block;width:100%;aspect-ratio:16/6}
+.pil .art .cap{margin-top:10px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:900px){
+  .pil,.pil.flip{grid-template-columns:1fr;gap:20px;padding:26px 0}
+  .pil.flip .txt{margin-left:0;text-align:left}
+  .pil.flip .art .cap{text-align:left}
+  .pil.flip .txt{order:1}.pil.flip .art{order:2}   /* read text first when stacked */
+  .pil .art canvas{aspect-ratio:16/7}
+}
+
+/* ---------- auditions ---------- */
+.aud{position:relative;background:var(--paper)}
+.aud-top{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,6vw,96px);
+  align-items:start;margin-bottom:clamp(28px,4.5vh,50px)}
+.aud h2{font-weight:700;font-size:clamp(30px,6vw,86px);letter-spacing:-.045em;line-height:.88}
+.aud-copy{color:var(--ink-2);font-size:14.5px;line-height:1.68;max-width:54ch;
+  margin-bottom:clamp(30px,5vh,54px)}
+.aud-facts{display:flex;flex-direction:column;gap:1px;background:var(--rule-2);
+  border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+.aud-facts>div{background:var(--paper);display:flex;justify-content:space-between;gap:18px;
+  padding:14px 0}
+.aud-facts dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--ink-3)}
+.aud-facts dd{font-size:13px;color:var(--ink);text-align:right}
+
+/* the form is the point of the section, so it gets the width */
+.applybar{display:flex;align-items:stretch;border:1px solid var(--rule-2);
+  transition:border-color .3s;background:var(--paper)}
+.applybar:focus-within{border-color:var(--ink-3)}
+.applybar input{
+  flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--ink);
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;
+  padding:clamp(18px,2.6vh,26px) clamp(18px,2.4vw,30px);
+}
+.applybar input::placeholder{color:var(--ink-4);text-transform:uppercase;letter-spacing:.16em;
+  font-size:10.5px}
+.applybar button{
+  border:none;background:var(--ink);color:var(--paper);cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:0 clamp(24px,3.4vw,46px);white-space:nowrap;transition:background .3s;
+}
+.applybar button span{margin-left:9px;font-weight:400}
+.applybar button:hover{background:var(--ink-2)}
+.fine{margin-top:18px;font-family:var(--mono);font-size:8.5px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:860px){
+  .aud-top{grid-template-columns:1fr;gap:30px}
+  .applybar{flex-direction:column;align-items:stretch}
+  .applybar button{padding:16px 0}
+}
+
+/* ---------- the intake plot ---------- */
+.plot{position:relative;margin:0 0 clamp(26px,4vh,46px)}
+.plot canvas{display:block;width:100%;aspect-ratio:16/3.4}
+.plot figcaption{margin-top:12px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:860px){.plot canvas{aspect-ratio:16/7}}
+
+/* ---------- footer ---------- */
+footer{position:relative;padding:clamp(40px,7vh,80px) var(--pad) var(--pad);
+  position:relative;z-index:2;background:var(--paper)}
+.f-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;
+  padding-bottom:clamp(34px,5vh,58px);border-bottom:1px solid var(--rule-2)}
+.f-mark{font-weight:700;font-size:clamp(22px,3vw,38px);letter-spacing:-.035em}
+.f-mark sup{font-size:.3em;font-weight:400;vertical-align:super}
+.f-line{font-family:var(--mono);font-size:9.5px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--ink-3);line-height:2;text-align:right}
+.f-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;
+  padding:clamp(30px,4.5vh,50px) 0}
+.f-col{display:flex;flex-direction:column;gap:9px}
+.f-h{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink);margin-bottom:6px}
+.f-col a,.f-col span{font-size:12.5px;color:var(--ink-2);text-decoration:none;width:max-content;
+  transition:color .25s}
+.f-col a:hover{color:var(--ink)}
+.f-col span{color:var(--ink-4)}
+.f-base{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  padding-top:22px;border-top:1px solid var(--rule-2);
+  font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-4)}
+@media(max-width:860px){.f-cols{grid-template-columns:repeat(2,1fr)}
+  .f-line{text-align:left}}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(20px);
+  transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grid" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ===== BAR ===== -->
+<header class="bar" id="bar">
+  <a href="#top" class="lock">
+    <div class="a">JS Entertainment</div>
+    <div class="b">Group development</div>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#roster" data-sec="roster">Roster</a>
+    <a href="#company" data-sec="company">Company</a>
+    <a href="#auditions" data-sec="auditions">Auditions</a>
+  </nav>
+  <div class="sq" aria-hidden="true"></div>
+</header>
+
+<!-- ===== HERO ===== -->
+<main class="hero" id="top">
+  <canvas id="stage" aria-hidden="true"></canvas>
+
+  <div class="crop" aria-hidden="true">
+    <i class="v" style="left:33.333%"></i>
+    <i class="v" style="left:66.666%"></i>
+    <i class="h" style="top:30%"></i>
+    <i class="h" style="top:76%"></i>
+  </div>
+
+  <div class="marg tr">
+    Group development<br>
+    Casting &amp; talent<br>
+    Releases<br>
+    Brand partnership
+    <div style="height:15px"></div>
+    https//:jsentertainment.org
+  </div>
+
+  <div class="logo" aria-hidden="true">
+    <h1>JS Entertainment<sup>®</sup></h1>
+  </div>
+  <div class="logo front" aria-hidden="true">
+    <h1>JS Entertainment<sup>®</sup></h1>
+  </div>
+  <h1 class="sr">JS Entertainment</h1>
+  <div class="under">We build and operate groups</div>
+
+  <div class="marg bl">
+    <span class="big">01</span>
+    <span>/ 04<br>Groups</span>
+  </div>
+
+  <a class="cue" href="#roster" aria-label="Scroll to the roster">
+    <span>Scroll</span><i></i>
+  </a>
+
+  <div class="marg br">
+    Follow
+    <a href="#" onclick="return false">instagram</a>
+    <a href="#" onclick="return false">tiktok</a>
+    <a href="#" onclick="return false">youtube</a>
+  </div>
+</main>
+
+<!-- ===== OVERSIZED WORD ===== -->
+<div class="band rv">
+  <div class="word">Groups.</div>
+  <div class="cap">
+    <p>One aesthetic and one discipline each. A group is a production company with a house style — not five accounts that happen to match.</p>
+    <div>Fig. 01 — the unit of the company</div>
+  </div>
+</div>
+
+<!-- ===== ROSTER ===== -->
+<section class="rv" id="roster">
+  <div class="head">
+    <h2>The roster</h2>
+    <div class="sub">Four planned · one opens at a time<br>No two groups share a discipline</div>
+  </div>
+
+  <div class="rgrid">
+    <a class="card" href="aloudpeace/index.html">
+      <div class="art"><canvas data-solid="torus"></canvas>
+        <div class="no">01</div><div class="st live">In casting</div>
+      </div>
+      <div class="bd">
+        <div class="nm">A Loud Peace</div>
+        <div class="dis">Sound</div>
+        <div class="ae">Brutalist · concrete and chrome<br>Near-silent</div>
+        <div class="go">Enter <span>→</span></div>
+      </div>
+    </a>
+
+    <div class="card soon">
+      <div class="art"><canvas data-solid="box"></canvas>
+        <div class="no">02</div><div class="st">In concept</div>
+      </div>
+      <div class="bd">
+        <div class="nm">Kiln</div>
+        <div class="dis">Make</div>
+        <div class="ae">Clay, linen, hands<br>Warm 35mm</div>
+        <div class="go">Not yet</div>
+      </div>
+    </div>
+
+    <div class="card soon">
+      <div class="art"><canvas data-solid="octa"></canvas>
+        <div class="no">03</div><div class="st">In concept</div>
+      </div>
+      <div class="bd">
+        <div class="nm">Afterglow</div>
+        <div class="dis">Night</div>
+        <div class="ae">Wet asphalt · neon<br>Motion blur</div>
+        <div class="go">Not yet</div>
+      </div>
+    </div>
+
+    <a class="card" href="#auditions">
+      <div class="art"><canvas data-solid="tetra"></canvas>
+        <div class="no">04</div><div class="st">Open</div>
+      </div>
+      <div class="bd">
+        <div class="nm">Your group</div>
+        <div class="dis">Pitched</div>
+        <div class="ae">One word for the look<br>One sentence for the craft</div>
+        <div class="go">Pitch it <span>→</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ===== COMPANY ===== -->
+<section class="rv hr" id="company">
+  <div class="eyebrow">◦ How the company works</div>
+  <div class="head">
+    <h2>Build. Operate. Own.</h2>
+    <div class="sub">The group keeps the taste<br>The company keeps the machine</div>
+  </div>
+
+  <div class="pillars">
+    <div class="pil">
+      <div class="txt">
+        <h3>Build</h3>
+        <p>Groups are assembled, not discovered. The aesthetic and the discipline are defined first, then people are cast into them — for how they fit the world, never for the audience they arrive with.</p>
+      </div>
+      <div class="art"><canvas data-fig="converge"></canvas><div class="cap">Fig. 02 — casting</div></div>
+    </div>
+
+    <div class="pil flip">
+      <div class="txt">
+        <h3>Operate</h3>
+        <p>Every group runs the same cycle: the shoot day, the release calendar, the deal desk, the numbers. Shared underneath, invisible on top. That is what makes the second group cheap.</p>
+      </div>
+      <div class="art"><canvas data-fig="cycle" data-mirror="1"></canvas><div class="cap">Fig. 03 — the machine</div></div>
+    </div>
+
+    <div class="pil">
+      <div class="txt">
+        <h3>Own</h3>
+        <p>The group is the asset and it outlasts any line-up. The company owns the name and the work; members own their own faces and their own accounts.</p>
+      </div>
+      <div class="art"><canvas data-fig="frame"></canvas><div class="cap">Fig. 04 — the asset</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AUDITIONS ===== -->
+<section class="aud rv hr" id="auditions">
+  <div class="eyebrow">◦ Auditions — always open</div>
+
+  <div class="aud-top">
+    <h2>One form.<br>Every group.</h2>
+    <dl class="aud-facts">
+      <div><dt>Open slots</dt><dd>5 across one group</dd></div>
+      <div><dt>Commitment</dt><dd>One shoot day a month</dd></div>
+      <div><dt>You keep</dt><dd>Your account and likeness</dd></div>
+      <div><dt>Based</dt><dd>Bay Area, California</dd></div>
+    </dl>
+  </div>
+
+  <p class="aud-copy">You apply to the company, not to a group — we work out where you fit. No following required. What matters is whether you can hold a look and hit a deadline twice in a row.</p>
+
+  <figure class="plot">
+    <canvas id="intake" aria-hidden="true"></canvas>
+    <figcaption>Fig. 05 — intake · the pool, read continuously</figcaption>
+  </figure>
+
+  <form class="applybar" id="form" novalidate>
+    <input type="text" id="who" placeholder="@handle — and what you do" aria-label="Handle and what you do">
+    <button type="submit" id="send">Apply <span>+</span></button>
+  </form>
+  <div class="fine">Rolling · Bay Area first — groups, brands and press use the same inbox</div>
+</section>
+
+<footer>
+  <div class="f-top">
+    <div class="f-mark">JS Entertainment<sup>®</sup></div>
+    <div class="f-line">We build and operate groups.<br>One aesthetic and one discipline each.</div>
+  </div>
+  <div class="f-cols">
+    <div class="f-col">
+      <div class="f-h">Index</div>
+      <a href="#top">Home</a><a href="#roster">Roster</a>
+      <a href="#company">Company</a><a href="#auditions">Auditions</a>
+    </div>
+    <div class="f-col">
+      <div class="f-h">Groups</div>
+      <a href="aloudpeace/index.html">A Loud Peace ↗</a>
+      <span>Kiln — in concept</span><span>Afterglow — in concept</span>
+      <a href="#auditions">Pitch a group</a>
+    </div>
+    <div class="f-col">
+      <div class="f-h">Contact</div>
+      <a href="#auditions">Casting</a><a href="#auditions">Brand partnership</a>
+      <a href="#auditions">Press</a>
+    </div>
+    <div class="f-col">
+      <div class="f-h">Follow</div>
+      <a href="#" onclick="return false">Instagram</a>
+      <a href="#" onclick="return false">TikTok</a>
+      <a href="#" onclick="return false">YouTube</a>
+    </div>
+  </div>
+  <div class="f-base">
+    <span>Bay Area, California</span>
+    <span>© MMXXVI JS Entertainment — all groups, all rights</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var onScrollUI = function(){};   // set below; also called from the rAF loop
+
+/* ============================================================
+   SOFTWARE 3D — convex solids, painter-sorted, environment-shaded.
+   The ramp is tuned for a PAPER background: the object needs real
+   darks to describe its form against white.
+   ============================================================ */
+function box(s){var h=s/2;
+  return {v:[[-h,-h,-h],[h,-h,-h],[h,h,-h],[-h,h,-h],[-h,-h,h],[h,-h,h],[h,h,h],[-h,h,h]],
+          f:[[0,1,2,3],[5,4,7,6],[4,0,3,7],[1,5,6,2],[4,5,1,0],[3,2,6,7]]};}
+function octa(r){return {v:[[r,0,0],[-r,0,0],[0,r,0],[0,-r,0],[0,0,r],[0,0,-r]],
+          f:[[0,2,4],[2,1,4],[1,3,4],[3,0,4],[2,0,5],[1,2,5],[3,1,5],[0,3,5]]};}
+function tetra(r){return {v:[[r,r,r],[r,-r,-r],[-r,r,-r],[-r,-r,r]],
+          f:[[0,1,2],[0,3,1],[0,2,3],[1,3,2]]};}
+function icosa(r){
+  var t=(1+Math.sqrt(5))/2, v=[];
+  [[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],
+   [t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]].forEach(function(p){
+    var l=Math.hypot(p[0],p[1],p[2]); v.push([p[0]/l*r,p[1]/l*r,p[2]/l*r]);});
+  return {v:v,f:[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],
+    [10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],
+    [8,6,7],[9,8,1]]};}
+function torus(R,r,maj,min){
+  var v=[],f=[],i,j;
+  for(i=0;i<maj;i++){var u=i/maj*6.2832,cu=Math.cos(u),su=Math.sin(u);
+    for(j=0;j<min;j++){var t=j/min*6.2832,rr=R+r*Math.cos(t);
+      v.push([cu*rr,r*Math.sin(t),su*rr]);}}
+  for(i=0;i<maj;i++)for(j=0;j<min;j++){
+    f.push([i*min+j,i*min+(j+1)%min,((i+1)%maj)*min+(j+1)%min,((i+1)%maj)*min+j]);}
+  return {v:v,f:f,R:R};}
+
+function rot(p,rx,ry){
+  var x=p[0],y=p[1],z=p[2];
+  var c1=Math.cos(rx),s1=Math.sin(rx), y1=y*c1-z*s1, z1=y*s1+z*c1;
+  var c2=Math.cos(ry),s2=Math.sin(ry);
+  return [x*c2+z1*s2, y1, -x*s2+z1*c2];}
+function sub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]];}
+function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function norm(a){var l=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/l,a[1]/l,a[2]/l];}
+
+/* bright studio environment with hard dark bands — high contrast, so a
+   silver object still has edges and form against paper */
+/* every value is held BELOW the paper tone (#f5f5f3 = 245) so no facet can
+   dissolve into the page — that is what made parts of the solid disappear */
+/* A studio environment with a DARK GROUND and a bright horizon.
+   The previous ramp was light at BOTH ends, so a downward-facing side came
+   out pale — which made a cube read inside-out, like an open box with a lit
+   floor, and made light sides vanish against the page. Now: down is dark,
+   the horizon is the highlight, up is soft light. Everything stays at least
+   ~45 levels below the paper tone (#f5f5f3 = 245) so no face can dissolve. */
+var ENV=[[0,[34,36,38]],[.20,[70,73,75]],[.38,[142,145,145]],[.48,[194,196,194]],
+         [.53,[199,200,198]],[.62,[164,166,166]],[.74,[100,103,105]],
+         [.88,[150,152,152]],[1,[178,180,178]]];
+function env(u){
+  u=u<0?0:u>1?1:u;
+  for(var i=1;i<ENV.length;i++){ if(u<=ENV[i][0]){
+    var a=ENV[i-1],b=ENV[i],t=(u-a[0])/(b[0]-a[0]||1);
+    return [a[1][0]+(b[1][0]-a[1][0])*t,a[1][1]+(b[1][1]-a[1][1])*t,a[1][2]+(b[1][2]-a[1][2])*t];}}
+  return ENV[ENV.length-1][1];}
+
+/* Face normals are computed ONCE in object space, where "outward" is
+   meaningful, then rotated each frame. The outward test differs by topology:
+   for a convex solid the centroid points outward, but a torus is NOT convex —
+   its inner faces have centroids pointing toward the axis, so the convex test
+   flips them, they get back-face culled, and chunks of the ring vanish. */
+function prep(mesh){
+  if(mesh.nrm) return mesh;
+  mesh.nrm=[];
+  for(var i=0;i<mesh.f.length;i++){
+    var f=mesh.f[i],k,cen=[0,0,0];
+    for(k=0;k<f.length;k++){cen[0]+=mesh.v[f[k]][0];cen[1]+=mesh.v[f[k]][1];cen[2]+=mesh.v[f[k]][2];}
+    cen[0]/=f.length;cen[1]/=f.length;cen[2]/=f.length;
+    var n=norm(cross(sub(mesh.v[f[1]],mesh.v[f[0]]),sub(mesh.v[f[2]],mesh.v[f[0]])));
+    var ref;
+    if(mesh.R){                                  // torus: away from the tube's centre circle
+      var l=Math.hypot(cen[0],cen[2])||1;
+      ref=[cen[0]-mesh.R*cen[0]/l, cen[1], cen[2]-mesh.R*cen[2]/l];
+    }else ref=cen;                                // convex solid
+    if(dot(n,ref)<0) n=[-n[0],-n[1],-n[2]];
+    mesh.nrm.push(n);
+  }
+  return mesh;
+}
+
+var LIGHT=norm([-.42,.74,.52]);
+function shade(n){
+  var c=env(.5+.5*n[1]*0.98 + n[2]*.10);
+  var spec=Math.pow(Math.max(0,dot(n,LIGHT)),26);
+  // the highlight is capped too, for the same reason
+  return 'rgb('+Math.min(212,c[0]+spec*130|0)+','+Math.min(212,c[1]+spec*130|0)+','
+              +Math.min(212,c[2]+spec*130|0)+')';}
+
+function render(x,W,H,mesh,opt){ scene(x,W,H,[{m:mesh,o:opt}]); }
+
+/* Draw several meshes in a SINGLE painter pass. Two separate render() calls
+   cannot interleave, so the second mesh always sits on top — which is why the
+   ring read as sitting behind the solid instead of around it. */
+function scene(x,W,H,items){
+  var faces=[],i,j,k;
+  for(i=0;i<items.length;i++){
+    var mesh=prep(items[i].m), o=items[i].o, D=o.dist||4.2;
+    var cx=W/2+(o.ox||0), cy=H/2+(o.oy||0), sc=o.scale;
+    var pv=mesh.v.map(function(p){return rot(p,o.rx,o.ry);});
+    for(j=0;j<mesh.f.length;j++){
+      var n=rot(mesh.nrm[j],o.rx,o.ry);
+      if(n[2]<=0) continue;                       // cull at the silhouette
+      var f=mesh.f[j],pts=[],zsum=0;
+      for(k=0;k<f.length;k++){
+        var pp=pv[f[k]], sf=D/(D+pp[2]);
+        pts.push([cx+pp[0]*sf*sc, cy-pp[1]*sf*sc]);
+        zsum+=pp[2];
+      }
+      faces.push({p:pts,n:n,z:zsum/f.length});
+    }
+  }
+  faces.sort(function(a,b){return b.z-a.z;});     // FAR first: larger z is further away
+  for(i=0;i<faces.length;i++){
+    var fc=faces[i],col=shade(fc.n),P=fc.p;
+    x.beginPath();x.moveTo(P[0][0],P[0][1]);
+    for(k=1;k<P.length;k++) x.lineTo(P[k][0],P[k][1]);
+    x.closePath();
+    x.fillStyle=col;x.fill();
+    x.strokeStyle=col;x.lineWidth=1;x.stroke();
+  }
+}
+
+function wireframe(x,W,H,mesh,opt){
+  var rx=opt.rx,ry=opt.ry,scale=opt.scale,D=opt.dist||4.2;
+  var cx=W/2+(opt.ox||0), cy=H/2+(opt.oy||0), i,k;
+  var pv=mesh.v.map(function(p){return rot(p,rx,ry);});
+  function P(p){var s=D/(D+p[2]);return [cx+p[0]*s*scale, cy-p[1]*s*scale];}
+  x.lineWidth=opt.w||1;
+  var seen={};
+  for(i=0;i<mesh.f.length;i++){
+    var f=mesh.f[i];
+    if(opt.frontOnly && rot(prep(mesh).nrm[i],rx,ry)[2]<=0) continue;
+    for(k=0;k<f.length;k++){
+      var a=f[k],b=f[(k+1)%f.length];
+      var key=Math.min(a,b)+'_'+Math.max(a,b);
+      if(seen[key]) continue; seen[key]=1;
+      x.strokeStyle='rgba(11,11,12,'+(opt.alpha||.2)+')';
+      var pa=P(pv[a]),pb=P(pv[b]);
+      x.beginPath();x.moveTo(pa[0],pa[1]);x.lineTo(pb[0],pb[1]);x.stroke();
+    }
+  }
+}
+
+
+/* a soft, occlusion-weighted contact shadow on the paper */
+function contact(ctx,cx,cy,w,h,strength){
+  var g=ctx.createRadialGradient(cx,cy,1,cx,cy,w);
+  g.addColorStop(0,'rgba(11,11,12,'+(strength||0.26)+')');
+  g.addColorStop(0.45,'rgba(11,11,12,'+(strength||0.26)*0.42+')');
+  g.addColorStop(1,'rgba(11,11,12,0)');
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(1,h/w); ctx.translate(-cx,-cy);
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,w,0,6.2832); ctx.fill();
+  ctx.restore();
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+(function(){
+  var c=document.getElementById('stage'); if(!c) return;
+  var x=c.getContext('2d'),W=0,H=0,dpr=Math.min(devicePixelRatio||1,2);
+  var SOLID=icosa(1.05), RING=torus(1.66,.085,96,22);
+  var t=0,mx=0,my=0,tmx=0,tmy=0,vis=true;
+  function rs(){W=c.clientWidth;H=c.clientHeight;
+    c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);}
+  addEventListener('resize',rs);rs();
+  addEventListener('pointermove',function(e){
+    tmx=(e.clientX/innerWidth-.5)*2;tmy=(e.clientY/innerHeight-.5)*2;},{passive:true});
+  new IntersectionObserver(function(es){es.forEach(function(e){vis=e.isIntersecting;});},
+    {threshold:.02}).observe(c);
+
+  function paint(){
+      var base=Math.min(W,H), narrow=W<900;
+      var sc=base*(narrow?0.235:0.26);
+      var oy=narrow?-H*0.10:0;
+      var rx=-0.20+my*0.26, ry=t*2.0+mx*0.50;
+      x.clearRect(0,0,W,H);
+      contact(x,W/2,H/2+oy+sc*1.28,sc*1.12,sc*0.14,0.22);
+      scene(x,W,H,[
+        {m:RING,  o:{rx:rx+0.52, ry:ry*1.5, scale:sc, ox:0, oy:oy}},
+        {m:SOLID, o:{rx:rx,      ry:ry,     scale:sc, ox:0, oy:oy}}
+      ]);
+  }
+  paint();
+
+  function frame(){
+    if(vis){
+      t+=reduce?0:.0040;
+      mx+=(tmx-mx)*.06; my+=(tmy-my)*.06;
+      paint();                   // the pointer nudges the sprite, no re-trace
+      if(reduce) vis=false;
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ============================================================
+   ROSTER EMBLEMS + AUDITION SOLID
+   ============================================================ */
+(function(){
+  var MK={torus:function(){return torus(1.02,.27,72,26);},box:function(){return box(1.45);},
+          octa:function(){return octa(1.14);},tetra:function(){return tetra(.80);}};
+  var items=[];
+  function add(cv,kind,opt){
+    var st={c:cv,x:cv.getContext('2d'),m:MK[kind](),kind:kind,
+            t:Math.random()*20,vis:false,opt:opt||{}};
+    function rs(){var d=Math.min(devicePixelRatio||1,2);
+      st.W=cv.clientWidth;st.H=cv.clientHeight;
+      cv.width=Math.round(st.W*d);cv.height=Math.round(st.H*d);st.x.setTransform(d,0,0,d,0,0);}
+    rs();addEventListener('resize',rs);
+    new IntersectionObserver(function(es){es.forEach(function(e){
+      st.vis=e.isIntersecting;});},
+      {threshold:.06}).observe(cv);
+    items.push(st);
+  }
+  document.querySelectorAll('.card .art canvas').forEach(function(cv){add(cv,cv.dataset.solid,{});});
+
+  var RXC=-0.24;
+
+  function paintItem(s){
+      var x=s.x,W=s.W,H=s.H;
+      x.clearRect(0,0,W,H);
+      var sc=Math.min(W,H)*(s.opt.big?0.30:0.225);
+      var ry=s.t*2.1;
+      var rx=RXC+Math.sin(s.t*.7)*.09;
+      if(s.kind==='tetra'){
+        wireframe(x,W,H,s.m,{rx:rx,ry:ry,scale:sc*1.15,alpha:.40,w:1});
+      }else{
+        contact(x,W/2,H/2+sc*1.26,sc*1.05,sc*0.13,0.20);
+        render(x,W,H,s.m,{rx:rx,ry:ry,scale:sc});
+      }
+  }
+  items.forEach(paintItem);      // never leave a canvas blank
+
+  function tick(){
+    for(var i=0;i<items.length;i++){
+      var s=items[i]; if(!s.vis) continue;
+      s.t+=reduce?0:.0036;
+      paintItem(s);
+      if(reduce) s.vis=false;
+    }
+    onScrollUI();
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ============================================================
+   PILLAR FIGURES — technical diagrams, not solids. Line only, so
+   nothing below the roster repeats the roster's rotating chrome.
+   ============================================================ */
+(function(){
+  var figs=[];
+  document.querySelectorAll('.pil .art canvas').forEach(function(cv){
+    var st={c:cv,x:cv.getContext('2d'),k:cv.dataset.fig,mir:cv.dataset.mirror==='1',
+            t:Math.random()*20,vis:false,seed:9};
+    function rs(){
+      var d=Math.min(devicePixelRatio||1,2);
+      st.W=cv.clientWidth; st.H=cv.clientHeight;
+      cv.width=Math.round(st.W*d); cv.height=Math.round(st.H*d);
+      st.x.setTransform(d,0,0,d,0,0);
+    }
+    rs(); addEventListener('resize',rs);
+    new IntersectionObserver(function(es){es.forEach(function(e){st.vis=e.isIntersecting;});},
+      {threshold:.05}).observe(cv);
+    figs.push(st);
+  });
+  if(!figs.length) return;
+
+  function rnd(st){ st.seed=(st.seed*1103515245+12345)&0x7fffffff; return st.seed/0x7fffffff; }
+  function ink(a){ return 'rgba(11,11,12,'+a+')'; }
+  function ease(u){ return u<0?0:u>1?1:u*u*(3-2*u); }
+
+  /* Every plate shares the same drawing box, the same baseline and the same
+     index tick, so the three read as a set from one manual rather than three
+     unrelated drawings. */
+  function plate(st){
+    var x=st.x,W=st.W,H=st.H;
+    var b={l:W*0.05, r:W*0.95, t:H*0.10, b:H*0.80};
+    x.strokeStyle=ink(0.13); x.lineWidth=1;
+    x.beginPath(); x.moveTo(b.l,b.b+0.5); x.lineTo(b.r,b.b+0.5); x.stroke();   // baseline
+    x.strokeStyle=ink(0.30);
+    var tx=st.mir?b.r-0.5:b.l+0.5;                                   // tick mirrors too
+    x.beginPath(); x.moveTo(tx,b.b); x.lineTo(tx,b.b-H*0.09); x.stroke();
+    return b;
+  }
+
+  var F={
+    /* .01 BUILD — a scattered pool that periodically resolves into five */
+    converge:function(st){
+      var x=st.x,H=st.H,t=st.t,i,b=plate(st);
+      var y=b.b, phase=(t*0.13)%1;
+      var pull=ease((phase-0.15)/0.3)-ease((phase-0.68)/0.22);
+      st.seed=9;
+      var slots=[],span=b.r-b.l;
+      for(i=0;i<5;i++) slots.push(b.l+span*(0.24+i*0.13));
+      for(i=0;i<44;i++){
+        var sx=b.l+rnd(st)*span, sy=b.t+rnd(st)*(b.b-b.t)*0.94;
+        var dr=rnd(st)*6.2832;
+        sx+=Math.sin(t*0.5+dr)*span*0.012; sy+=Math.cos(t*0.42+dr)*H*0.04;
+        var pick=i<5;
+        var px=pick?sx+(slots[i]-sx)*pull:sx, py=pick?sy+(y-sy)*pull:sy;
+        x.fillStyle=ink(pick?(0.22+0.55*pull).toFixed(3):0.20);
+        x.beginPath(); x.arc(px,py,pick?1.5+1.1*pull:1.3,0,6.2832); x.fill();
+      }
+      if(pull>0.02){
+        x.strokeStyle=ink((0.42*pull).toFixed(3)); x.lineWidth=1;
+        x.beginPath(); x.moveTo(slots[0],y);
+        for(i=1;i<5;i++) x.lineTo(slots[i],y);
+        x.stroke();
+      }
+    },
+
+    /* .02 OPERATE — one cycle, running, resting on the same baseline */
+    cycle:function(st){
+      var x=st.x,t=st.t,i,b=plate(st);
+      var R=(b.b-b.t)*0.48, cx=b.l+(b.r-b.l)*0.5, cy=b.b-R;
+      [1,0.70,0.44].forEach(function(f,ri){
+        x.strokeStyle=ink((0.13+ri*0.05).toFixed(3)); x.lineWidth=1;
+        x.beginPath(); x.arc(cx,cy,R*f,0,6.2832); x.stroke();
+      });
+      for(i=0;i<48;i++){
+        var a=i/48*6.2832+t*0.10, lg=(i%4===0)?R*0.13:R*0.06;
+        x.strokeStyle=ink(i%4===0?0.34:0.16); x.lineWidth=1;
+        x.beginPath();
+        x.moveTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);
+        x.lineTo(cx+Math.cos(a)*(R-lg),cy+Math.sin(a)*(R-lg));
+        x.stroke();
+      }
+      var sa=t*0.85;
+      x.strokeStyle=ink(0.55); x.lineWidth=1;
+      x.beginPath(); x.moveTo(cx,cy); x.lineTo(cx+Math.cos(sa)*R*0.94,cy+Math.sin(sa)*R*0.94); x.stroke();
+      x.fillStyle=ink(0.75);
+      x.beginPath(); x.arc(cx+Math.cos(-sa*1.6)*R*0.70,cy+Math.sin(-sa*1.6)*R*0.70,2.2,0,6.2832); x.fill();
+      x.beginPath(); x.arc(cx,cy,1.7,0,6.2832); x.fill();
+    },
+
+    /* .03 OWN — the frame persists while what stands in it turns over */
+    frame:function(st){
+      var x=st.x,H=st.H,t=st.t,i,b=plate(st);
+      var l=b.l+(b.r-b.l)*0.16, r=b.r-(b.r-b.l)*0.16, tp=b.t, bt=b.b;
+      var tick=Math.min(r-l,bt-tp)*0.14;
+      x.strokeStyle=ink(0.30); x.lineWidth=1;
+      x.strokeRect(l+0.5,tp+0.5,r-l,bt-tp);
+      [[l,tp,1,1],[r,tp,-1,1],[l,bt,1,-1],[r,bt,-1,-1]].forEach(function(c){
+        x.strokeStyle=ink(0.55);
+        x.beginPath(); x.moveTo(c[0],c[1]); x.lineTo(c[0]+tick*c[2],c[1]); x.stroke();
+        x.beginPath(); x.moveTo(c[0],c[1]); x.lineTo(c[0],c[1]+tick*c[3]); x.stroke();
+      });
+      for(i=0;i<5;i++){
+        var ph=(t*0.22+i*0.2)%1, a=Math.sin(ph*Math.PI);
+        var bx=l+(r-l)*(0.14+i*0.18), hgt=(bt-tp)*(0.28+0.46*a);
+        x.strokeStyle=ink((0.10+0.42*a).toFixed(3)); x.lineWidth=1;
+        x.beginPath(); x.moveTo(bx,bt-3); x.lineTo(bx,bt-3-hgt); x.stroke();
+        x.beginPath(); x.arc(bx,bt-5-hgt,1.7,0,6.2832); x.stroke();
+      }
+    }
+  };
+
+  (function loop(){
+    for(var i=0;i<figs.length;i++){
+      var st=figs[i]; if(!st.vis||!F[st.k]) continue;
+      st.t+=reduce?0:.016;
+      st.x.clearRect(0,0,st.W,st.H);
+      F[st.k](st);
+      if(reduce) st.vis=false;
+    }
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ============================================================
+   INTAKE PLOT — a ridgeline read-out. Deliberately NOT another
+   rotating solid: this is pure line work, hidden-line removed by
+   filling each row with paper before stroking the one above it.
+   ============================================================ */
+(function(){
+  var c=document.getElementById('intake'); if(!c) return;
+  var x=c.getContext('2d'), W=0,H=0,t=Math.random()*40,vis=false;
+  var ROWS=24, COLS=96;
+  function rs(){
+    var d=Math.min(devicePixelRatio||1,2);
+    W=c.clientWidth; H=c.clientHeight;
+    c.width=Math.round(W*d); c.height=Math.round(H*d); x.setTransform(d,0,0,d,0,0);
+  }
+  rs(); addEventListener('resize',rs);
+  new IntersectionObserver(function(es){es.forEach(function(e){vis=e.isIntersecting;});},
+    {threshold:.04}).observe(c);
+
+  function curve(r,tt){
+    var pts=[],i;
+    for(i=0;i<=COLS;i++){
+      var u=i/COLS, px=u*W;
+      var d=(u-0.5)*2, envp=Math.exp(-d*d*2.6);            // taper at the edges
+      var k=r/(ROWS-1);
+      var a=Math.sin(u*8.5 + tt*0.85 + r*0.42)*0.55
+          + Math.sin(u*17.0 - tt*1.15 + r*0.23)*0.28
+          + Math.sin(u*31.0 + tt*0.55 - r*0.11)*0.12;
+      var amp=H*0.30*envp*(0.35+0.65*(1-k));               // taller toward the front
+      pts.push([px, H*0.16 + k*H*0.70 - a*amp]);
+    }
+    return pts;
+  }
+
+  function draw(){
+    if(vis){
+      t+=reduce?0:.006;
+      x.clearRect(0,0,W,H);
+      for(var r=0;r<ROWS;r++){                              // back row first
+        var p=curve(r,t), i;
+        // occlude everything behind this row
+        x.beginPath(); x.moveTo(p[0][0],p[0][1]);
+        for(i=1;i<p.length;i++) x.lineTo(p[i][0],p[i][1]);
+        x.lineTo(W,H+2); x.lineTo(0,H+2); x.closePath();
+        x.fillStyle='#f5f5f3'; x.fill();
+        // then the line itself
+        x.beginPath(); x.moveTo(p[0][0],p[0][1]);
+        for(i=1;i<p.length;i++) x.lineTo(p[i][0],p[i][1]);
+        x.strokeStyle='rgba(11,11,12,'+(0.16+0.42*(r/(ROWS-1))).toFixed(3)+')';
+        x.lineWidth=1; x.stroke();
+      }
+      if(reduce) vis=false;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ---------- bar + current-section nav ---------- */
+(function(){
+  var bar=document.getElementById('bar');
+  var links=[].slice.call(document.querySelectorAll('.nav a[data-sec]'));
+  var last=-1;
+  onScrollUI=function(){
+    if(scrollY===last) return;          // nothing moved
+    last=scrollY;
+    bar.classList.toggle('on', scrollY>40);
+    // the section actually straddling the reading line, measured live
+    var line=innerHeight*0.42, cur=null;
+    links.forEach(function(a){
+      var sec=document.getElementById(a.dataset.sec); if(!sec) return;
+      var r=sec.getBoundingClientRect();
+      if(r.top<=line && r.bottom>line) cur=a;
+    });
+    links.forEach(function(a){ a.classList.toggle('here', a===cur); });
+  };
+  // Driven from BOTH the scroll event and the render loop: scroll events can be
+  // coalesced or suppressed, and a nav that silently stops updating is worse
+  // than one that costs three getBoundingClientRect calls a frame.
+  addEventListener('scroll',onScrollUI,{passive:true});
+  addEventListener('resize',onScrollUI);
+  onScrollUI();
+})();
+
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.08});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(!document.getElementById('who').value.trim()) return;
+  document.getElementById('send').textContent='Sent';
+});
+})();
+</script>
+</body>
+</html>

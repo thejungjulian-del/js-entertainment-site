@@ -1,0 +1,1038 @@
+<meta charset="utf-8">
+<title>A LOUD PEACE — THE LOUD ROOM (animatic)</title>
+<style>
+@font-face{
+  font-family:"ALP Wordmark";
+  src:url(data:font/otf;base64,T1RUTwAJAIAAAwAQQ0ZGILx+gg8AAAKgAAACKU9TLzJHHEECAAABAAAAAGBjbWFwATgBGgAAAiQAAABcaGVhZC6HiGYAAACcAAAANmhoZWEFjgHrAAAA1AAAACRobXR4FSABAAAABMwAAAAobWF4cAAKUAAAAAD4AAAABm5hbWVxBIv5AAABYAAAAMNwb3N0AAMAAAAAAoAAAAAgAAEAAAABAABop4OBXw889QADA+gAAAAA5oIiUQAAAADmgiJRAAD/9QJsAu8AAAADAAIAAAAAAAAAAQAAAyD/TAAAAoAAAAAUAmwAAQAAAAAAAAAAAAAAAAAAAAoAAFAAAAoAAAADAh0BkAAFAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA/Pz8/AAAAIABVAyD/TAAAAAAAAAAAAAAAAAAAAAAC5AAAACAAAAAAAAYATgABAAAAAAABABEAAAABAAAAAAACAAcAEQABAAAAAAAGAA8AGAADAAEECQABACIAJwADAAEECQACAA4ASQADAAEECQAGAB4AV0EgTG91ZCBQZWFjZSBTYW5zRGlzcGxheUFMb3VkUGVhY2UtU2FucwBBACAATABvAHUAZAAgAFAAZQBhAGMAZQAgAFMAYQBuAHMARABpAHMAcABsAGEAeQBBAEwAbwB1AGQAUABlAGEAYwBlAC0AUwBhAG4AcwAAAAACAAAAAwAAABQAAwABAAAAFAAEAEgAAAAOAAgAAgAGACAAQQBFAEwAUABV//8AAAAgAEEAQwBMAE8AVf///+H/wf/A/7r/uP+0AAEAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAEAgABAQEQQUxvdWRQZWFjZS1TYW5zAAEBARb4GwL4GwOLgPkA+YMF1Q+L+L0S6BEAAQEBEkEgTG91ZCBQZWFjZSBTYW5zAAAAAAEAIgAkACUAJgAtADAAMQA2AAoCAAEABgAJADIAdwC6AN0A9gE7AXcBtPjsixYO9zQO+RSfFvcIBsD3Ifeai8D7IfcIi/ux+YMFbQY8/JQV6feL6fuLBftQBg745viZ+PEVQvcT+w+8+wJWCPsDVkH7JPs1Gvs11fsk9wNWHvcCVvcPvNT3Ewj7FwZGRTOjV/JX8Yv3LL/xv/Ljo9BFCA748LEW97YG9x73BPcE9x4f94QH9x77BPcE+x4e+7YGnvuLi/uKePuLCPcE8xX4qPdGB9fJSz0f+4wHPU1LPx77RgYO+JqxFvhW8/vm93n3xPP7xPdb9+bz/FYGnvuLi/uKePuLCA74irEW+ELz+9L5EPsEBp77i4v7inj7iwgO+P344/gGFfdm+xL3P/sw+zH7Evs/+2b7ZvcS+z/3MPcx9xL3P/dmHvsEFvstP/sQLC0/9xD3Lfct1/cQ6unX+xD7LR4O+MixFvcE9/L3VQb3AOLi9wD3ADTi+wAf+8UGnvuLi/uKePuLCPcE+FoV90r3VQe5sGJZWWZiXR/7VQYO+PWr+XgVnvszi/szePszCPsr9w77Dvcq9yv3DvcO9yoeePc0i/cznvczCPsE/HEGLUNAMjND1uke+HEHDgAAAAJYAAAAoAAAAoAAFAJSABoCXAAmAgYAJgH2ACYCaQAaAjQAJgJhACA=) format("opentype");
+  font-display:block;
+}
+:root{
+  --ink:#0a0b0b; --bone:#e9e7e1; --dim:#7d817c; --sage:#8a9a84;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --grotesk:"Helvetica Neue",Inter,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;color:var(--bone);
+  font-family:var(--grotesk);-webkit-font-smoothing:antialiased;overflow:hidden}
+
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:18px 18px 96px}
+canvas{display:block;max-width:100%;max-height:100%;background:#000;
+  box-shadow:0 0 0 1px #1a1c1b,0 30px 80px -30px #000}
+
+/* ── HUD ─────────────────────────────────────────── */
+#hud{position:fixed;left:0;right:0;bottom:0;padding:14px 18px 16px;
+  background:linear-gradient(#0000,#000000d9 38%);
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  transition:opacity .35s;z-index:5}
+#hud.hide{opacity:0;pointer-events:none}
+
+#bar{position:relative;height:26px;display:flex;gap:2px;cursor:pointer;
+  user-select:none;-webkit-user-select:none}
+.chip{position:relative;flex:0 0 auto;background:#16181791;border:1px solid #24272599;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  color:#6a6f6a;font-size:9px;letter-spacing:.1em;transition:color .2s,background .2s}
+.chip b{font-weight:400;white-space:nowrap;padding:0 6px;overflow:hidden;text-overflow:ellipsis}
+.chip.on{color:var(--bone);background:#22262299;border-color:#3b423b}
+.chip:hover{color:var(--bone)}
+#needle{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--bone);
+  pointer-events:none;box-shadow:0 0 8px #e9e7e1aa}
+
+#row{display:flex;align-items:center;gap:16px;margin-top:11px;color:var(--dim)}
+button{font:inherit;letter-spacing:.14em;text-transform:uppercase;background:none;
+  border:1px solid #2c302c;color:var(--dim);padding:6px 11px;cursor:pointer;
+  transition:.18s}
+button:hover{color:var(--bone);border-color:#5a615a}
+button.on{color:var(--ink);background:var(--bone);border-color:var(--bone)}
+#play{min-width:74px}
+#tc{color:var(--bone);font-variant-numeric:tabular-nums}
+.sep{flex:1}
+.key{color:#4a4f4a;font-size:9px;letter-spacing:.1em}
+#rec.live{color:#ff6b5e;border-color:#ff6b5e66}
+
+#note{position:fixed;top:16px;right:18px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.16em;text-transform:uppercase;color:#4d524d;text-align:right;
+  line-height:1.9;z-index:5;transition:opacity .35s}
+#note.hide{opacity:0}
+</style>
+
+<div id="stage"><canvas id="c"></canvas></div>
+
+<div id="note">
+  the loud room · animatic v1<br>
+  procedural placeholder — swap shot-by-shot
+</div>
+
+<div id="hud">
+  <div id="bar"><div id="needle"></div></div>
+  <div id="row">
+    <button id="play">play</button>
+    <span id="tc">00:00 / 00:35</span>
+    <button id="ar">9:16</button>
+    <button id="snd">sound off</button>
+    <button id="slate" class="on">slate</button>
+    <button id="rec">record</button>
+    <span class="sep"></span>
+    <span class="key">space play · ←→ 1s · 1-8 shot · s slate · h hide ui</span>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   A LOUD PEACE — "THE LOUD ROOM"
+   Playable animatic. Every shot is drawn procedurally so the CUT,
+   the PACING and the SOUND are real; the imagery is a stand-in.
+   Later: replace any drawX() with a <video> frame from Higgsfield.
+   ══════════════════════════════════════════════════════════════════ */
+
+const cv  = document.getElementById('c');
+const ctx = cv.getContext('2d', {alpha:false});
+
+let VW = 1080, VH = 1920;            // virtual (drawing) resolution
+let ar = '9:16';
+
+/* ?embed=1 — chromeless mode for the site. No HUD, no slate, autoplay,
+   loops, aspect follows the iframe, click anywhere toggles sound (a click
+   inside the frame is a real user gesture; a postMessage from the parent
+   is not, so audio has to be armed from in here). */
+const Q = new URLSearchParams(location.search);
+const EMBED = Q.has('embed');
+const FILL  = EMBED && Q.has('fill');   // cover the frame (crop) instead of fitting inside
+let LOOP = EMBED;
+
+/* ── shot list — mirrors loud-room-shotplan.md ───────────────────── */
+const SHOTS = [
+  {n:1, name:'EMPTY HALL',   cam:'slow dolly-in',  model:'VEO · 55cr',        dur:5, d:sHall},
+  {n:2, name:'THE PLINTH',   cam:'slow orbit',     model:'VEO/SORA · 65cr',   dur:6, d:sPlinth},
+  {n:3, name:'MOSS + VINES', cam:'locked macro',   model:'KLING · 6cr',       dur:3, d:sMoss},
+  {n:4, name:'THE FIGURE',   cam:'slow track',     model:'VEO · 55cr (soul id)', dur:6, d:sFigure},
+  {n:5, name:'THE HAND',     cam:'slow push',      model:'VEO · 55cr',        dur:4, d:sHand},
+  {n:6, name:'THE LOUD',     cam:'locked',         model:'SEEDANCE · 8cr',    dur:2, d:sPulse},
+  {n:7, name:'CHROME',       cam:'slow drift',     model:'KLING · 6cr',       dur:3, d:sChrome},
+  {n:8, name:'FINAL WIDE',   cam:'dolly-out',      model:'VEO · 55cr + overlay', dur:6, d:sWide},
+];
+let acc = 0; for (const s of SHOTS){ s.t0 = acc; acc += s.dur; s.t1 = acc; }
+const TOTAL = acc;                                    // 35s
+
+/* ── helpers ─────────────────────────────────────────────────────── */
+const cl  = (v,a,b)=>v<a?a:v>b?b:v;
+/* object sizes key off the SHORT edge, never the width — otherwise every
+   prop doubles when you flip 9:16 → 16:9 */
+const U   = ()=>Math.min(VW,VH);
+const lerp= (a,b,t)=>a+(b-a)*t;
+const ease= t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;      // smooth in/out
+const eOut= t=>1-Math.pow(1-t,3);
+const TAU = Math.PI*2;
+
+function rng(seed){                                    // mulberry32
+  let a=seed>>>0;
+  return ()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);
+    t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};
+}
+function mix(c1,c2,t){ return [lerp(c1[0],c2[0],t),lerp(c1[1],c2[1],t),lerp(c1[2],c2[2],t)]; }
+const rgb = c=>`rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;
+const rgba= (c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+
+function quad(p0,p1,p2,p3,fill){
+  ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);
+  ctx.lineTo(p2[0],p2[1]);ctx.lineTo(p3[0],p3[1]);ctx.closePath();
+  ctx.fillStyle=fill;ctx.fill();
+}
+/* offscreen scratch canvases, built once, keyed by name */
+const cache = {};
+function off(key,w,h,paint){
+  if(cache[key]) return cache[key];
+  const o=document.createElement('canvas');o.width=w;o.height=h;
+  paint(o.getContext('2d'),w,h);cache[key]=o;return o;
+}
+
+/* ══ THE HALL ═══════════════════════════════════════════════════════
+   Shared world for shots 1 / 4 / 6 / 8. A brutalist corridor drawn as
+   depth slices, plus volumetric shafts and floating dust.            */
+const HW = 900, CH = 1700, FH = 620;      // half-width, ceiling, floor
+const CONC = [34,36,35], HAZE = [80,86,83], MOSSC = [42,56,40];
+
+function hallCam(){ return {fl: VH*0.72, hz: VH*0.455}; }
+function P(x,y,z,cam){                    // project world → screen
+  if(z<220) return null;
+  const s = cam.fl/z;
+  return [VW/2 + x*s, cam.hz + y*s, s];
+}
+
+function hall(zc, opt={}){
+  const cam = hallCam();
+  const bright = opt.bright ?? 1;
+  ctx.fillStyle=rgb(CONC.map(v=>v*.35*bright));ctx.fillRect(0,0,VW,VH);
+  // far end of the hall — without this the tunnel of slices leaves a hole
+  const zf=9400-zc, fa=P(-HW,-CH,zf,cam), fb=P(HW,FH,zf,cam);
+  if(fa&&fb){
+    const fg=ctx.createLinearGradient(0,fa[1],0,fb[1]);
+    fg.addColorStop(0,rgb(HAZE.map(v=>v*.62*bright)));
+    fg.addColorStop(.55,rgb(HAZE.map(v=>v*1.02*bright)));
+    fg.addColorStop(1,rgb(HAZE.map(v=>v*.78*bright)));
+    ctx.fillStyle=fg;
+    ctx.fillRect(fa[0],fa[1],fb[0]-fa[0],fb[1]-fa[1]);
+  }
+  // depth slices, far → near
+  const zs=[]; for(let z=700,k=0;z<11000;z*=1.115,k++) zs.push(z);
+  const r=rng(7);
+  const jit=zs.map(()=>r()*10-5);
+  for(let i=zs.length-1;i>0;i--){
+    const z0=zs[i]-zc, z1=zs[i-1]-zc;
+    if(z1<250) continue;
+    const dep = cl(1-(zs[i]-700)/9000,0,1);           // 1 near … 0 far
+    const fade= Math.pow(1-dep,2.1);                   // haze mix
+    const band= (i%2)?0:5;
+    const c0=P(-HW,-CH,z0,cam), c1=P(HW,-CH,z0,cam),
+          c2=P(HW,-CH,z1,cam), c3=P(-HW,-CH,z1,cam),
+          f0=P(-HW,FH,z0,cam), f1=P(HW,FH,z0,cam),
+          f2=P(HW,FH,z1,cam), f3=P(-HW,FH,z1,cam);
+    if(!c0||!c2||!f0||!f2) continue;
+    const sh=(base)=>rgb(mix(base.map(v=>v*bright),HAZE.map(v=>v*bright),fade*.70));
+    quad(c0,c1,c2,c3, sh(CONC.map(v=>v*0.46+band*.3)));            // ceiling
+    quad(f0,f1,f2,f3, sh(CONC.map(v=>v*1.14+band*.5)));            // floor
+    quad(c0,f0,f3,c3, sh(CONC.map(v=>v*0.72+jit[i]*.35+band)));    // L wall
+    quad(c1,f1,f2,c2, sh(CONC.map(v=>v*0.92+jit[i]*.3 +band)));    // R wall
+    // panel seams — walls and floor, so the foreground floor isn't a flat void
+    ctx.strokeStyle=rgba(mix([22,24,23],HAZE,fade*.8),.55);ctx.lineWidth=Math.max(.6,1.4*c0[2]);
+    ctx.beginPath();ctx.moveTo(c0[0],c0[1]);ctx.lineTo(f0[0],f0[1]);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(c1[0],c1[1]);ctx.lineTo(f1[0],f1[1]);ctx.stroke();
+    ctx.strokeStyle=rgba(mix([20,22,21],HAZE,fade*.8),.32);
+    ctx.beginPath();ctx.moveTo(f0[0],f0[1]);ctx.lineTo(f1[0],f1[1]);ctx.stroke();
+    // moss creeping the wall base
+    if(dep>.10&&dep<.72){
+      const rr=rng(i*131+3);
+      for(let k=0;k<3;k++){
+        const yy=FH-rr()*170, side=rr()<.5?-1:1;
+        const pt=P(side*HW,yy,(z0+z1)/2,cam); if(!pt) continue;
+        ctx.fillStyle=rgba(mix(MOSSC,HAZE,fade*.9),.20+rr()*.22);
+        ctx.beginPath();
+        ctx.ellipse(pt[0]+ (rr()*16-8), pt[1], 17*pt[2]*(.5+rr()), 8*pt[2]*(.5+rr()),0,0,TAU);
+        ctx.fill();
+      }
+    }
+  }
+  // wall datum seams — start far enough back that they stay inside the walls
+  ctx.strokeStyle='rgba(16,18,17,.30)';ctx.lineWidth=1.6;
+  for(const y of [-980,-260,220]) for(const sx of [-1,1]){
+    ctx.beginPath();let m=0;
+    for(let z=2900;z<10500;z*=1.18){const p=P(sx*HW,y,z-zc,cam);if(!p)continue;
+      m++?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);}
+    ctx.stroke();
+  }
+  // bloom over the far opening so it doesn't read as a framed rectangle
+  const vp=P(0,0,9000-zc,cam);
+  if(vp){
+    ctx.globalCompositeOperation='lighter';
+    const bg=ctx.createRadialGradient(vp[0],vp[1],2,vp[0],vp[1],VH*.36);
+    bg.addColorStop(0,rgba(mix(HAZE,[168,176,170],.55),.34*bright));
+    bg.addColorStop(.45,rgba(HAZE,.13*bright));
+    bg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,VW,VH);
+    ctx.globalCompositeOperation='source-over';
+  }
+  return cam;
+}
+/* a low concrete plinth deep in the hall, for the object to sit on */
+function farPlinth(z,cam,w=300,h=520){
+  const a=P(-w,FH,z,cam), b=P(w,FH,z,cam), c=P(w,FH-h,z,cam), d=P(-w,FH-h,z,cam);
+  if(!a||!c) return null;
+  quad(d,c,b,a,'#191c1b');
+  ctx.strokeStyle='rgba(150,160,152,.16)';ctx.lineWidth=Math.max(.8,1.6*a[2]);
+  ctx.beginPath();ctx.moveTo(d[0],d[1]);ctx.lineTo(c[0],c[1]);ctx.stroke();
+  ctx.fillStyle='rgba(0,0,0,.45)';
+  ctx.beginPath();ctx.ellipse(a[0]+(b[0]-a[0])/2,a[1],(b[0]-a[0])*.62,10*a[2]+2,0,0,TAU);ctx.fill();
+  return d;
+}
+
+function shafts(zc,t,cam,amt=1){
+  ctx.globalCompositeOperation='lighter';
+  const defs=[[2600,.13],[5000,.10],[7600,.07]];
+  for(const [Z,al] of defs){
+    const z=Z-zc; if(z<400) continue;
+    const p0=P(-HW,-1180,z,cam), p1=P(-HW,-1180,z+420,cam),
+          p2=P( 260, FH, z+1500,cam), p3=P(-320, FH, z+1050,cam);
+    if(!p0||!p1||!p2||!p3) continue;
+    const gr=ctx.createLinearGradient(p0[0],p0[1],p3[0],p3[1]);
+    const a=al*amt*(1+.12*Math.sin(t*.7+Z));
+    gr.addColorStop(0,`rgba(228,236,228,${a})`);
+    gr.addColorStop(.55,`rgba(206,216,208,${a*.5})`);
+    gr.addColorStop(1,'rgba(190,200,192,0)');
+    quad(p0,p1,p2,p3,gr);
+    // pool where it lands
+    const fp=P(-30,FH,z+1250,cam);
+    if(fp){const rg=ctx.createRadialGradient(fp[0],fp[1],2,fp[0],fp[1],520*fp[2]);
+      rg.addColorStop(0,`rgba(224,232,224,${a*1.5})`);rg.addColorStop(1,'rgba(200,210,200,0)');
+      ctx.fillStyle=rg;ctx.beginPath();
+      ctx.ellipse(fp[0],fp[1],540*fp[2],150*fp[2],0,0,TAU);ctx.fill();}
+    // wet-concrete smear of that pool dragged toward camera, so the
+    // foreground floor isn't a dead grey field
+    const nr=P(-30,FH,z+700,cam);
+    if(nr&&nr[1]<VH){
+      const sm=ctx.createLinearGradient(0,nr[1],0,VH);
+      sm.addColorStop(0,`rgba(198,210,200,${a*.30})`);
+      sm.addColorStop(.45,`rgba(180,192,184,${a*.10})`);
+      sm.addColorStop(1,'rgba(170,182,174,0)');
+      ctx.fillStyle=sm;
+      ctx.beginPath();
+      ctx.moveTo(nr[0]-360*nr[2],nr[1]);ctx.lineTo(nr[0]+360*nr[2],nr[1]);
+      ctx.lineTo(VW*.92,VH);ctx.lineTo(VW*.02,VH);ctx.closePath();ctx.fill();
+    }
+  }
+  ctx.globalCompositeOperation='source-over';
+}
+
+const DUST = (()=>{const r=rng(99);return Array.from({length:300},()=>({
+  x:r()*HW*2-HW, y:r()*2200-1400, z:700+r()*9500, sp:.3+r()*1.1, ph:r()*TAU}));})();
+function dust(zc,t,cam,amt=1){
+  ctx.globalCompositeOperation='lighter';
+  for(const d of DUST){
+    const y=d.y + (t*d.sp*26)%2200;
+    const x=d.x + Math.sin(t*.35+d.ph)*40;
+    const p=P(x, y>800?y-2200:y, d.z-zc, cam); if(!p) continue;
+    if(p[0]<-40||p[0]>VW+40||p[1]<-40||p[1]>VH+40) continue;
+    const inShaft = cl(1-Math.abs(x+300)/700,0,1);
+    const a=(.10+.42*inShaft)*cl(p[2]*2.2,0,1)*amt;
+    ctx.fillStyle=`rgba(232,238,230,${a})`;
+    ctx.beginPath();ctx.arc(p[0],p[1],Math.max(.7,2.4*p[2]),0,TAU);ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';
+}
+
+/* silhouette figure standing on the floor at (x,z) */
+function figure(x,z,cam,walk,h=430){
+  const foot=P(x,FH,z,cam); if(!foot) return;
+  const s=foot[2], H=h*s;
+  if(H<6) return;
+  const bob=Math.sin(walk*TAU)*H*.012;
+  const fx=foot[0], fy=foot[1]+bob;
+  const sw=Math.sin(walk*TAU), sw2=Math.sin(walk*TAU+Math.PI);
+  ctx.fillStyle='#0a0b0b';
+  // legs (garment, wide)
+  const lw=H*.085;
+  for(const [ph,dx] of [[sw,-1],[sw2,1]]){
+    ctx.beginPath();
+    ctx.moveTo(fx+dx*lw*.6-lw*.7, fy);
+    ctx.lineTo(fx+dx*lw*.6+lw*.7 + ph*H*.03, fy);
+    ctx.lineTo(fx+dx*lw*.5+lw*.5, fy-H*.46);
+    ctx.lineTo(fx+dx*lw*.5-lw*.5, fy-H*.46);
+    ctx.closePath();ctx.fill();
+  }
+  // coat / torso
+  ctx.beginPath();
+  ctx.moveTo(fx-H*.115, fy-H*.40);
+  ctx.quadraticCurveTo(fx-H*.135, fy-H*.62, fx-H*.088, fy-H*.80);
+  ctx.lineTo(fx+H*.088, fy-H*.80);
+  ctx.quadraticCurveTo(fx+H*.135, fy-H*.62, fx+H*.115, fy-H*.40);
+  ctx.closePath();ctx.fill();
+  // head
+  ctx.beginPath();ctx.ellipse(fx, fy-H*.885, H*.052, H*.062,0,0,TAU);ctx.fill();
+  // faint rim light, camera-left
+  ctx.strokeStyle='rgba(186,198,188,.20)';ctx.lineWidth=Math.max(.7,1.6*s);
+  ctx.beginPath();
+  ctx.moveTo(fx-H*.115, fy-H*.40);
+  ctx.quadraticCurveTo(fx-H*.135, fy-H*.62, fx-H*.088, fy-H*.80);
+  ctx.stroke();
+}
+
+/* ══ CHROME — shared look for the piece ═════════════════════════════ */
+const RAMP = [[16,19,20],[228,236,230],[58,66,64],[196,206,198],
+              [26,30,30],[124,142,120],[240,246,240],[40,46,46]];
+function chromeCol(u){
+  u=(u%1+1)%1; const f=u*RAMP.length, i=Math.floor(f);
+  return mix(RAMP[i%RAMP.length], RAMP[(i+1)%RAMP.length], f-i);
+}
+/* the oversized loud piece: a torus, drawn as a swept polyline whose
+   colour comes from the reflection angle. Reads as liquid metal. */
+function ring(cx,cy,R,tube,rotY,tilt,light=1,alpha=1){
+  const N=200, pts=[];
+  for(let i=0;i<=N;i++){
+    const th=i/N*TAU;
+    const x=Math.cos(th)*R, y=Math.sin(th)*R;
+    const y2=y*Math.cos(tilt), z2=y*Math.sin(tilt);          // tilt about X
+    const x2=x*Math.cos(rotY)+z2*Math.sin(rotY),             // rotate about Y
+          z3=-x*Math.sin(rotY)+z2*Math.cos(rotY);
+    const persp=1/(1+z3/(R*7));
+    pts.push([cx+x2*persp, cy+y2*persp, persp, th]);
+  }
+  // offset the centreline into an outer + inner rim so the tube is a
+  // continuous filled band — thick strokes with round caps scallop.
+  const A=[],B=[];
+  for(let i=0;i<=N;i++){
+    const p=pts[i], q=pts[i===N?1:i+1], o=pts[i===0?N-1:i-1];
+    const dx=q[0]-o[0], dy=q[1]-o[1], L=Math.hypot(dx,dy)||1;
+    const w=tube*.5*p[2];
+    A.push([p[0]-dy/L*w, p[1]+dx/L*w]);
+    B.push([p[0]+dy/L*w, p[1]-dx/L*w]);
+  }
+  for(let i=0;i<N;i++){
+    const p=pts[i];
+    const u = p[3]/TAU*2 + rotY/TAU*1.4;                     // reflection sweep
+    const c = chromeCol(u);
+    const spec = Math.pow(cl(Math.cos(p[3]-2.3),0,1),7);
+    const base= mix(c,[255,255,255],spec*.85*light).map(v=>v*(.55+.45*p[2]));
+    const moss= cl(Math.sin(p[3]-.5),0,1);                   // green bounce, lower edge
+    const lit = mix(base,[136,162,124],moss*.30);
+    // across-tube gradient = the tube reads round, not flat
+    const gr=ctx.createLinearGradient(A[i][0],A[i][1],B[i][0],B[i][1]);
+    gr.addColorStop(0,   rgba(lit.map(v=>v*.34),alpha));
+    gr.addColorStop(.34, rgba(lit,alpha));
+    gr.addColorStop(.56, rgba(mix(lit,[255,255,255],.35*light),alpha));
+    gr.addColorStop(1,   rgba(lit.map(v=>v*.48),alpha));
+    quad(A[i],A[i+1],B[i+1],B[i],gr);
+  }
+}
+
+/* ══ SHOT 1 — EMPTY HALL ════════════════════════════════════════════ */
+function sHall(p,T){
+  const zc = lerp(0, 900, ease(p));            // dolly-in
+  const cam = hall(zc);
+  shafts(zc,T,cam,1);
+  dust(zc,T,cam,1);
+}
+
+/* ══ SHOT 2 — THE PLINTH ════════════════════════════════════════════ */
+function sPlinth(p,T){
+  const cam = {fl:VH*0.72, hz:VH*0.50};
+  // dim room wash
+  const gr=ctx.createLinearGradient(0,0,0,VH);
+  gr.addColorStop(0,'#0d0f0f');gr.addColorStop(.5,'#191c1b');gr.addColorStop(1,'#101211');
+  ctx.fillStyle=gr;ctx.fillRect(0,0,VW,VH);
+  // suggested walls
+  const hz=VH*.50;
+  quad([0,0],[VW*.22,0],[VW*.30,VH],[0,VH],'#0e100f');
+  quad([VW*.78,0],[VW,0],[VW,VH],[VW*.70,VH],'#121514');
+  // floor
+  quad([0,hz+VH*.16],[VW,hz+VH*.16],[VW,VH],[0,VH],'#1a1d1c');
+  ctx.strokeStyle='#0b0d0c';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(0,hz+VH*.16);ctx.lineTo(VW,hz+VH*.16);ctx.stroke();
+
+  const a = lerp(-0.5, 0.9, ease(p));          // orbit
+  const u=U(), cx=VW/2, base=VH*.780;
+
+  // top light pool on the floor
+  const rg=ctx.createRadialGradient(cx,base,10,cx,base,u*.60);
+  rg.addColorStop(0,'rgba(206,216,206,.20)');rg.addColorStop(.45,'rgba(150,162,152,.07)');
+  rg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=rg;ctx.beginPath();ctx.ellipse(cx,base,u*.60,u*.085,0,0,TAU);ctx.fill();
+
+  // plinth — raw concrete box in mild perspective
+  const pw=u*.29, ph=u*.22, sk=Math.sin(a)*pw*.26;
+  const topY=base-ph;
+  quad([cx-pw/2,topY+6],[cx+pw/2,topY+6],[cx+pw/2,base],[cx-pw/2,base], sk>0?'#232625':'#1d201f');
+  // top face (ellipse-ish quad)
+  quad([cx-pw/2,topY],[cx+pw/2,topY],[cx+pw/2-sk*.5,topY-u*.026],[cx-pw/2-sk*.5,topY-u*.026],'#31352f');
+  ctx.strokeStyle='#0e100f';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(cx-pw/2,topY);ctx.lineTo(cx+pw/2,topY);ctx.stroke();
+  // faint moss at the plinth foot
+  const rr=rng(21);
+  for(let i=0;i<26;i++){
+    ctx.fillStyle=`rgba(66,88,62,${.16+rr()*.24})`;
+    ctx.beginPath();
+    ctx.ellipse(cx-pw*.6+rr()*pw*1.2, base+rr()*u*.022, 10+rr()*22, 4+rr()*8,0,0,TAU);
+    ctx.fill();
+  }
+
+  // THE PIECE — oversized, on the plinth
+  const R=u*.200, cyR=topY-u*.030-R*.62;
+  // shadow / contact
+  ctx.fillStyle='rgba(0,0,0,.55)';
+  ctx.beginPath();ctx.ellipse(cx,topY-u*.020,R*.85,R*.14,0,0,TAU);ctx.fill();
+  // soft halo
+  const hg=ctx.createRadialGradient(cx,cyR,R*.4,cx,cyR,R*2.4);
+  hg.addColorStop(0,'rgba(184,198,188,.16)');hg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=hg;ctx.fillRect(cx-R*2.6,cyR-R*2.6,R*5.2,R*5.2);
+  ring(cx,cyR,R,u*.050,a,0.36);
+
+  dust(0,T,cam,.75);
+  // key light from above
+  ctx.globalCompositeOperation='lighter';
+  const lg=ctx.createLinearGradient(cx,0,cx,base);
+  lg.addColorStop(0,'rgba(220,230,222,.10)');lg.addColorStop(1,'rgba(220,230,222,0)');
+  quad([cx-u*.20,0],[cx+u*.20,0],[cx+u*.34,base],[cx-u*.34,base],lg);
+  ctx.globalCompositeOperation='source-over';
+}
+
+/* ══ SHOT 3 — MOSS + VINES (macro) ══════════════════════════════════ */
+function concreteTile(){
+  return off('conc',900,900,(o,w,h)=>{
+    o.fillStyle='#3a3d3b';o.fillRect(0,0,w,h);
+    const r=rng(5);
+    for(let i=0;i<26000;i++){
+      const v=150+r()*105, a=.05+r()*.12;
+      o.fillStyle=`rgba(${v},${v},${v-2},${a})`;
+      o.fillRect(r()*w,r()*h,1+r()*2.4,1+r()*2.4);
+    }
+    for(let i=0;i<1400;i++){          // pits
+      o.fillStyle=`rgba(18,20,19,${.10+r()*.3})`;
+      o.beginPath();o.arc(r()*w,r()*h,.7+r()*3.6,0,TAU);o.fill();
+    }
+    for(let i=0;i<7;i++){             // hairline cracks — shallow drift, not zigzags
+      o.strokeStyle=`rgba(22,24,23,${.14+r()*.16})`;o.lineWidth=.6+r()*1.1;
+      o.beginPath();let x=r()*w,y=r()*h,a=r()*TAU;o.moveTo(x,y);
+      for(let k=0;k<26;k++){a+=r()*.5-.25;x+=Math.cos(a)*26;y+=Math.sin(a)*26;o.lineTo(x,y);}
+      o.stroke();
+    }
+  });
+}
+function vines(){
+  if(cache.vines) return cache.vines;
+  const segs=[], leaves=[]; const r=rng(31);
+  function grow(x,y,ang,len,w,depth,d0){
+    let d=d0;
+    const n=7+Math.floor(r()*4);
+    for(let i=0;i<n;i++){
+      const l=len/n, a2=ang+(r()*.30-.15);
+      const x2=x+Math.cos(a2)*l, y2=y+Math.sin(a2)*l;
+      segs.push({x,y,x2,y2,w:w*(1-i/n*.55),d0:d,d1:d+l,ph:r()*TAU});
+      if(r()<.40) leaves.push({x:x2,y:y2,a:a2+(r()<.5?1.25:-1.25),
+                               s:w*(1.5+r()*1.3),d:d+l,ph:r()*TAU});
+      if(depth>0 && r()<.26) grow(x2,y2,a2+(r()<.5?1:-1)*(.45+r()*.30),len*.44,w*.55,depth-1,d+l);
+      x=x2;y=y2;ang=a2;d+=l;
+    }
+  }
+  for(let i=0;i<4;i++) grow(VW*(.12+i*.26)+r()*50, VH*1.02, -Math.PI/2+(r()*.34-.17),
+                            VH*(.42+r()*.36), 6+r()*4, 2, 0);
+  const max=Math.max(...segs.map(s=>s.d1));
+  cache.vines={segs,leaves,max};return cache.vines;
+}
+function sMoss(p,T){
+  const tile=concreteTile();
+  const k=lerp(1.06,1.14,p);                 // barely-there breathing
+  const w=VW*k, h=VH*k;
+  ctx.drawImage(tile,(VW-w)/2 - VW*.02*p,(VH-h)/2,w,h);
+  // damp shadowing
+  const gr=ctx.createLinearGradient(0,0,0,VH);
+  gr.addColorStop(0,'rgba(10,12,11,.55)');gr.addColorStop(.55,'rgba(10,12,11,.10)');
+  gr.addColorStop(1,'rgba(8,14,8,.60)');
+  ctx.fillStyle=gr;ctx.fillRect(0,0,VW,VH);
+  // moss bed — low, in the crevices
+  const rr=rng(12);
+  for(let i=0;i<420;i++){
+    const x=rr()*VW, y=VH-Math.pow(rr(),2.2)*VH*.42;
+    ctx.fillStyle=`rgba(${40+rr()*30|0},${58+rr()*34|0},${36+rr()*22|0},${.16+rr()*.34})`;
+    ctx.beginPath();ctx.ellipse(x,y,4+rr()*16,2+rr()*7,rr()*TAU,0,TAU);ctx.fill();
+  }
+  // vines, growing
+  const V=vines(), G=eOut(p)*V.max*1.02;
+  ctx.lineCap='round';
+  for(const s of V.segs){
+    if(s.d0>G) continue;
+    const f=cl((G-s.d0)/(s.d1-s.d0),0,1);
+    const sway=Math.sin(T*.9+s.ph)*3.5*(1-s.y/VH);
+    ctx.strokeStyle='#2f4229';ctx.lineWidth=s.w;
+    ctx.beginPath();ctx.moveTo(s.x+sway,s.y);
+    ctx.lineTo(lerp(s.x,s.x2,f)+sway, lerp(s.y,s.y2,f));ctx.stroke();
+  }
+  for(const L of V.leaves){
+    if(L.d>G) continue;
+    const a=cl((G-L.d)/(V.max*.06),0,1);
+    const sway=Math.sin(T*.9+L.ph)*4;
+    ctx.save();ctx.translate(L.x+sway,L.y);ctx.rotate(L.a+Math.sin(T*.7+L.ph)*.10);
+    const rx=L.s*1.9*a, ry=L.s*.66*a;
+    const lg=ctx.createLinearGradient(0,-ry,0,ry);
+    lg.addColorStop(0,`rgba(74,102,60,${.86*a})`);
+    lg.addColorStop(1,`rgba(38,58,34,${.90*a})`);
+    ctx.fillStyle=lg;
+    ctx.beginPath();ctx.ellipse(rx*.55,0,rx,ry,0,0,TAU);ctx.fill();
+    ctx.strokeStyle=`rgba(22,34,20,${.45*a})`;ctx.lineWidth=.9;ctx.stroke();
+    ctx.strokeStyle=`rgba(96,124,80,${.30*a})`;                      // midrib
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(rx*1.5,0);ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ══ SHOT 4 — THE FIGURE ════════════════════════════════════════════ */
+function sFigure(p,T){
+  const zc = lerp(0, 620, ease(p));
+  const cam = hall(zc);
+  shafts(zc,T,cam,1.1);
+  // the object, far, on a plinth, glowing
+  const oz=5200-zc;
+  farPlinth(oz,cam,260,560);
+  const op=P(0,FH-560-300,oz,cam);
+  if(op){
+    const R=300*op[2];
+    const hg=ctx.createRadialGradient(op[0],op[1],R*.2,op[0],op[1],R*3.6);
+    hg.addColorStop(0,'rgba(198,212,200,.30)');hg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=hg;ctx.fillRect(op[0]-R*3.8,op[1]-R*3.8,R*7.6,R*7.6);
+    ring(op[0],op[1],R,R*.28, .5+T*.05, .34, 1, .92);
+  }
+  const fz = lerp(1900, 3400, ease(p));
+  figure(-150, fz-zc, cam, T*0.72);
+  dust(zc,T,cam,1.1);
+}
+
+/* ══ SHOT 5 — THE HAND ══════════════════════════════════════════════ */
+/* Hand: overlapping solid capsules baked into ONE offscreen silhouette.
+   Stroking rim + core straight onto the frame outlines every capsule
+   individually and the result reads as a robot claw — the union has to be
+   flattened first, then rimmed as a single shape. */
+const FINGERS = [                       // [angle, length, thickness, y offset]
+  [-0.26, 0.60, 0.100, -0.19],          // index
+  [-0.06, 0.66, 0.104, -0.055],         // middle
+  [ 0.14, 0.58, 0.098,  0.075],         // ring
+  [ 0.33, 0.44, 0.086,  0.185],         // little
+];
+const HW_REF=1200, HH_REF=780, HX_REF=620, HY_REF=390, HS_REF=400;
+function handImg(){
+  return off('hand',HW_REF,HH_REF,(o,w,h)=>{
+    const s=HS_REF, x=HX_REF, y=HY_REF;
+    o.lineCap='round';o.strokeStyle='#000';
+    const cap=(x1,y1,x2,y2,ww)=>{o.lineWidth=ww;
+      o.beginPath();o.moveTo(x1,y1);o.lineTo(x2,y2);o.stroke();};
+    cap(x+s*1.35, y+s*0.05, x+s*0.56, y+s*0.02, s*0.40);       // forearm
+    cap(x+s*0.64, y-s*0.05, x+s*0.24, y+s*0.07, s*0.50);       // palm
+    for(const [a,len,th,oy] of FINGERS){                        // fingers
+      const bx=x+s*0.24, by=y+s*oy;
+      const mx=bx-Math.cos(a)*s*len*0.62, my=by+Math.sin(a)*s*len*0.62;
+      const tx=mx-Math.cos(a+0.20)*s*len*0.46, ty=my+Math.sin(a+0.20)*s*len*0.46;
+      cap(bx,by,mx,my,s*th);cap(mx,my,tx,ty,s*th*0.94);
+    }
+    cap(x+s*0.56, y+s*0.24, x+s*0.24, y+s*0.38, s*0.145);      // thumb
+    cap(x+s*0.24, y+s*0.38, x-s*0.02, y+s*0.34, s*0.125);
+  });
+}
+function sHand(p,T){
+  ctx.fillStyle='#0c0e0e';ctx.fillRect(0,0,VW,VH);
+  const push=lerp(1,1.16,ease(p));
+  const u=U(), cx=VW*.38, cy=VH*.47;
+  // object glow + the piece
+  const R=u*.210*push;
+  const hg=ctx.createRadialGradient(cx,cy,R*.1,cx,cy,R*3);
+  hg.addColorStop(0,'rgba(178,194,182,.26)');hg.addColorStop(.5,'rgba(120,136,126,.08)');
+  hg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=hg;ctx.fillRect(0,0,VW,VH);
+  ring(cx,cy,R,u*.054*push, .9+T*.06, .30, .85, 1);
+  const cam=hallCam(); dust(0,T,cam,.6);
+
+  // the hand, entering from the right and reaching in
+  const img=handImg(), k=u*.40*push/HS_REF;
+  const hx=lerp(VW*1.20, VW*0.86, ease(p)), hy=cy+VH*.045;
+  const dx=hx-HX_REF*k, dy=hy-HY_REF*k;
+  ctx.save();
+  ctx.shadowColor='rgba(198,214,200,.60)';ctx.shadowBlur=u*.020;
+  ctx.drawImage(img,dx,dy,HW_REF*k,HH_REF*k);   // shadow = rim light on the union
+  ctx.shadowBlur=u*.008;
+  ctx.drawImage(img,dx,dy,HW_REF*k,HH_REF*k);
+  ctx.restore();
+  ctx.drawImage(img,dx,dy,HW_REF*k,HH_REF*k);   // solid core, no halo bleed inward
+}
+
+/* ══ SHOT 6 — THE LOUD (the one hit) ════════════════════════════════ */
+function sPulse(p,T){
+  ctx.fillStyle='#0a0c0c';ctx.fillRect(0,0,VW,VH);
+  const cam=hall(400,{bright:.68});
+  const u=U(), cx=VW/2, cy=VH*.455;
+  const flash=Math.pow(cl(1-p/0.22,0,1),1.7);
+  ctx.globalCompositeOperation='lighter';
+  // core
+  const core=ctx.createRadialGradient(cx,cy,2,cx,cy,u*(.36+.66*p));
+  core.addColorStop(0,`rgba(240,246,240,${.62*flash+.10})`);
+  core.addColorStop(.35,`rgba(168,182,172,${.20*flash+.05})`);
+  core.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=core;ctx.fillRect(0,0,VW,VH);
+  // expanding dust shockwaves
+  const r0=rng(77);
+  for(let k=0;k<5;k++){
+    const ph=p*1.5 - k*0.16; if(ph<0||ph>1.2) continue;
+    const R=eOut(cl(ph,0,1))*u*1.20, a=Math.pow(cl(1-ph,0,1),.8);
+    for(let i=0;i<520;i++){
+      const th=i/520*TAU + k*1.7;
+      const jr=R*(.82+r0()*.34), jy=(r0()-.5)*R*.36;
+      const x=cx+Math.cos(th)*jr, y=cy+Math.sin(th)*jr*.44+jy;
+      ctx.fillStyle=`rgba(230,238,230,${a*(.10+r0()*.40)})`;
+      ctx.beginPath();ctx.arc(x,y,.8+r0()*2.8*a,0,TAU);ctx.fill();
+    }
+  }
+  ctx.globalCompositeOperation='source-over';
+  ring(cx,cy,u*.17*(1+flash*.05),u*.048,1.2,.34,1+flash*2.4,1);
+  if(flash>.01){ctx.fillStyle=`rgba(232,238,232,${flash*.34})`;ctx.fillRect(0,0,VW,VH);}
+}
+
+/* ══ SHOT 7 — CHROME MACRO ══════════════════════════════════════════ */
+function scratchTile(){
+  return off('scr',1200,1200,(o,w,h)=>{
+    o.clearRect(0,0,w,h);const r=rng(17);
+    for(let i=0;i<2600;i++){
+      const y=r()*h, l=40+r()*520;
+      o.strokeStyle=`rgba(${r()<.5?255:0},${r()<.5?255:0},255,${.02+r()*.05})`;
+      o.lineWidth=.5+r()*1.2;
+      o.beginPath();o.moveTo(r()*w,y);o.lineTo(r()*w+l,y+(r()*6-3));o.stroke();
+    }
+  });
+}
+function sChrome(p,T){
+  const drift=p*VH*.30;
+  const gr=ctx.createLinearGradient(0,-drift,VW*.35,VH-drift);
+  const stops=[[0,[14,17,18]],[.14,[104,118,112]],[.24,[206,214,210]],[.30,[74,84,82]],
+               [.44,[20,24,24]],[.56,[142,156,148]],[.63,[224,232,228]],[.72,[44,52,50]],
+               [.86,[98,112,104]],[1,[13,16,17]]];
+  for(const [s,c] of stops) gr.addColorStop(s,rgb(c));
+  ctx.fillStyle=gr;ctx.fillRect(0,0,VW,VH);
+  // green moss reflection drifting through
+  ctx.globalCompositeOperation='overlay';
+  const mg=ctx.createRadialGradient(VW*(.30+p*.5),VH*(.62-p*.25),VH*.02,
+                                    VW*(.30+p*.5),VH*(.62-p*.25),VH*.42);
+  mg.addColorStop(0,'rgba(122,152,110,.72)');mg.addColorStop(1,'rgba(122,152,110,0)');
+  ctx.fillStyle=mg;ctx.fillRect(0,0,VW,VH);
+  ctx.globalCompositeOperation='source-over';
+  // anisotropic scratches
+  ctx.save();ctx.translate(-VW*.1,-drift*.5);ctx.rotate(-0.20);
+  ctx.globalAlpha=.55;ctx.drawImage(scratchTile(),0,0,VW*1.5,VH*1.4);
+  ctx.restore();ctx.globalAlpha=1;
+  // specular streak — gradient runs ACROSS the streak and fades to zero at
+  // both ends, so it can cover the whole frame without a visible band edge
+  ctx.globalCompositeOperation='lighter';
+  const y0=VH*(.18+p*.10);
+  const sg=ctx.createLinearGradient(VW*.62,y0,0,y0+VH*.42);
+  sg.addColorStop(0,'rgba(255,255,255,0)');
+  sg.addColorStop(.42,'rgba(255,255,255,.10)');
+  sg.addColorStop(.52,'rgba(255,255,255,.19)');
+  sg.addColorStop(.62,'rgba(255,255,255,.07)');
+  sg.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=sg;ctx.fillRect(0,0,VW,VH);
+  ctx.globalCompositeOperation='source-over';
+}
+
+/* ══ SHOT 8 — FINAL WIDE + WORDMARK ════════════════════════════════ */
+function drawTracked(text,cx,y,size,track,font){
+  ctx.font=`${size}px ${font}`;
+  const ch=[...text], w=ch.map(c=>ctx.measureText(c).width);
+  let total=w.reduce((a,b)=>a+b,0)+track*size*(ch.length-1);
+  let x=cx-total/2;
+  for(let i=0;i<ch.length;i++){ctx.fillText(ch[i],x,y);x+=w[i]+track*size;}
+  return total;
+}
+function sWide(p,T){
+  const zc = lerp(420, -520, ease(p));         // dolly-out
+  const cam = hall(zc);
+  shafts(zc,T,cam,.9);
+  const oz=5000-zc;
+  farPlinth(oz,cam,260,560);
+  const op=P(0,FH-560-280,oz,cam);
+  if(op&&op[2]>0){
+    const R=280*op[2];
+    const hg=ctx.createRadialGradient(op[0],op[1],R*.2,op[0],op[1],R*3.4);
+    hg.addColorStop(0,'rgba(190,204,194,.24)');hg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=hg;ctx.fillRect(op[0]-R*3.6,op[1]-R*3.6,R*7.2,R*7.2);
+    ring(op[0],op[1],R,R*.29,.7,.34,1,.88);
+  }
+  figure(-330, 3300, cam, 0);                  // still, small, dwarfed
+  dust(zc,T,cam,.9);
+
+  // final breath to black
+  const fade=cl((p-0.93)/0.07,0,1);
+  if(fade>0){ctx.fillStyle=`rgba(0,0,0,${fade*.55})`;ctx.fillRect(0,0,VW,VH);}
+}
+
+/* The wordmark is a POST overlay — composited after the grade, never
+   generated and never graded. Called from frame() on shot 8 only. */
+function wordmark(p){
+  const a=cl((p-0.40)/0.26,0,1), ao=eOut(a);
+  if(ao>0){
+    ctx.fillStyle=`rgba(6,7,7,${ao*.76})`;ctx.fillRect(0,0,VW,VH);
+    const y=VH*.465, size=U()*.132;
+    ctx.textBaseline='alphabetic';
+    ctx.fillStyle=`rgba(233,231,225,${ao})`;
+    const wm=drawTracked('A LOUD PEACE',VW/2,y,size,0.05,'"ALP Wordmark", var(--grotesk)');
+    // hairline
+    const lw=cl((p-0.58)/0.20,0,1);
+    ctx.strokeStyle=`rgba(233,231,225,${ao*.30})`;ctx.lineWidth=1.4;
+    ctx.beginPath();ctx.moveTo(VW/2-wm*.5*lw,y+size*.46);
+    ctx.lineTo(VW/2+wm*.5*lw,y+size*.46);ctx.stroke();
+    // tagline
+    const ta=cl((p-0.64)/0.22,0,1);
+    if(ta>0){ctx.fillStyle=`rgba(138,154,132,${ta})`;
+      drawTracked('ONE LOUD PIECE',VW/2,y+size*.95,U()*.019,0.50,
+        '"Helvetica Neue", system-ui, sans-serif');}
+  }
+}
+
+/* ══ GRADE — crushed blacks, green shadows, grain, vignette ═════════ */
+function grainTiles(){
+  if(cache.grain) return cache.grain;
+  cache.grain=Array.from({length:4},(_,k)=>off('gr'+k,180,180,(o,w,h)=>{
+    const d=o.createImageData(w,h), r=rng(1000+k);
+    for(let i=0;i<d.data.length;i+=4){
+      const v=128+(r()-.5)*230;
+      d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;
+    }
+    o.putImageData(d,0,0);
+  }));
+  return cache.grain;
+}
+function grade(T){
+  // green lift in the shadows
+  ctx.globalCompositeOperation='soft-light';
+  ctx.fillStyle='rgba(96,132,92,.20)';ctx.fillRect(0,0,VW,VH);
+  // crush + vignette
+  ctx.globalCompositeOperation='multiply';
+  const v=ctx.createRadialGradient(VW/2,VH*.48,VH*.20,VW/2,VH*.48,VH*.78);
+  v.addColorStop(0,'#ffffff');v.addColorStop(.62,'#c9c9c9');v.addColorStop(1,'#4c4f4c');
+  ctx.fillStyle=v;ctx.fillRect(0,0,VW,VH);
+  ctx.globalCompositeOperation='source-over';
+  // grain
+  const tiles=grainTiles(), t=tiles[(T*24|0)%4];
+  ctx.globalCompositeOperation='overlay';ctx.globalAlpha=.055;
+  const pat=ctx.createPattern(t,'repeat');
+  ctx.save();ctx.translate(-(T*97|0)%180,-(T*61|0)%180);
+  ctx.fillStyle=pat;ctx.fillRect(0,0,VW+200,VH+200);ctx.restore();
+  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+}
+
+/* ══ SLATE (animatic-only overlay) ══════════════════════════════════ */
+let slateOn=true;
+function slate(S,p,t){
+  if(!slateOn) return;
+  const m=U()*.042, F=U()*.0165;
+  // dark scrims so the slate stays legible over bright shots (07 CHROME)
+  const tg=ctx.createRadialGradient(0,0,10,0,0,U()*.62);
+  tg.addColorStop(0,'rgba(0,0,0,.60)');tg.addColorStop(.6,'rgba(0,0,0,.24)');
+  tg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=tg;ctx.fillRect(0,0,VW,VH*.30);
+  const bgd=ctx.createLinearGradient(0,VH,0,VH*.86);
+  bgd.addColorStop(0,'rgba(0,0,0,.50)');bgd.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=bgd;ctx.fillRect(0,VH*.86,VW,VH*.14);
+  ctx.textBaseline='alphabetic';
+  ctx.font=`${F}px ui-monospace, "SF Mono", Menlo, monospace`;
+  ctx.fillStyle='rgba(233,231,225,.60)';
+  ctx.fillText(`${String(S.n).padStart(2,'0')} / ${S.name}`, m, m+F);
+  ctx.fillStyle='rgba(138,154,132,.62)';
+  ctx.fillText(S.cam.toUpperCase(), m, m+F*2.5);
+  ctx.fillStyle='rgba(233,231,225,.28)';
+  ctx.fillText(S.model, m, m+F*3.9);
+  // running time, bottom-left
+  ctx.fillStyle='rgba(233,231,225,.34)';
+  ctx.fillText(tc(t), m, VH-m);
+  // shot progress hairline
+  ctx.strokeStyle='rgba(233,231,225,.16)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(m,VH-m-F*1.6);ctx.lineTo(VW-m,VH-m-F*1.6);ctx.stroke();
+  ctx.strokeStyle='rgba(233,231,225,.55)';
+  ctx.beginPath();ctx.moveTo(m,VH-m-F*1.6);
+  ctx.lineTo(m+(VW-2*m)*p,VH-m-F*1.6);ctx.stroke();
+}
+const tc=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`
+  + `:${String(Math.floor((s%1)*24)).padStart(2,'0')}`;
+
+/* ══ FRAME ══════════════════════════════════════════════════════════ */
+function frame(t){
+  t=cl(t,0,TOTAL-0.001);
+  const S=SHOTS.find(s=>t>=s.t0&&t<s.t1)||SHOTS[SHOTS.length-1];
+  const p=(t-S.t0)/S.dur;
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  const q=cv.width/VW; ctx.setTransform(q,0,0,q,0,0);
+  ctx.fillStyle='#000';ctx.fillRect(0,0,VW,VH);
+  S.d(p,t);
+  grade(t);
+  if(S.n===8) wordmark(p);            // post overlay, sits above the grade
+  slate(S,p,t);
+}
+
+/* ══ PLAYER ═════════════════════════════════════════════════════════ */
+let playing=false, T=0, last=0;
+function resize(){
+  if(EMBED){                                   // aspect follows the frame
+    const want = (innerWidth/innerHeight > 1.15) ? '16:9' : '9:16';
+    if(want!==ar){ ar=want; for(const k in cache) delete cache[k]; }
+  }
+  const [aw,ah]= ar==='9:16'?[9,16]:[16,9];
+  VW = ar==='9:16'?1080:1920; VH = ar==='9:16'?1920:1080;
+  const availW=innerWidth-(EMBED?0:36), availH=innerHeight-(EMBED?0:114);
+  let w=availW, h=w*ah/aw;
+  if(FILL){ if(h<availH){h=availH;w=h*aw/ah;} }   // cover
+  else    { if(h>availH){h=availH;w=h*aw/ah;} }   // contain
+  const dpr=Math.min(devicePixelRatio||1, 2);
+  cv.style.width=w+'px';cv.style.height=h+'px';
+  cv.width=Math.round(Math.min(VW, w*dpr));
+  cv.height=Math.round(cv.width*VH/VW);
+  // build every cached texture up front — otherwise the first frame of a
+  // shot pays ~40ms to generate it and drops a frame right on the cut
+  concreteTile();scratchTile();handImg();grainTiles();vines();
+  frame(T);
+}
+addEventListener('resize',resize);
+
+function tick(ts){
+  if(!last) last=ts;
+  const dt=Math.min((ts-last)/1000,.1); last=ts;
+  if(playing){
+    const prev=T; T+=dt;
+    if(prev<24 && T>=24) hit();          // the one loud hit, at shot 6
+    if(T>=TOTAL){ if(LOOP){T=0;} else {T=TOTAL-0.001;setPlay(false);} }
+    frame(T);sync();
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+/* ── HUD wiring ─────────────────────────────────────────────────── */
+const bar=document.getElementById('bar'), needle=document.getElementById('needle'),
+      tcEl=document.getElementById('tc'), playBtn=document.getElementById('play');
+SHOTS.forEach(S=>{
+  const d=document.createElement('div');
+  d.className='chip';d.style.flexBasis=(S.dur/TOTAL*100)+'%';
+  d.innerHTML=`<b>${String(S.n).padStart(2,'0')} ${S.name}</b>`;
+  d.onclick=e=>{e.stopPropagation();seek(S.t0);};
+  S.el=d;bar.appendChild(d);
+});
+function sync(){
+  needle.style.left=(T/TOTAL*100)+'%';
+  tcEl.textContent=`${tc(T).slice(0,5)} / ${tc(TOTAL).slice(0,5)}`;
+  const cur=SHOTS.find(s=>T>=s.t0&&T<s.t1);
+  SHOTS.forEach(s=>s.el.classList.toggle('on',s===cur));
+}
+function seek(t){T=cl(t,0,TOTAL-0.001);frame(T);sync();}
+function setPlay(v){
+  playing=v;playBtn.textContent=v?'pause':'play';playBtn.classList.toggle('on',v);
+  if(v){ if(T>=TOTAL-0.01) T=0; startAudio(); } else stopAudio();
+}
+playBtn.onclick=()=>setPlay(!playing);
+let drag=false;
+const barSeek=e=>{const r=bar.getBoundingClientRect();
+  seek((e.clientX-r.left)/r.width*TOTAL);};
+bar.addEventListener('pointerdown',e=>{drag=true;barSeek(e);bar.setPointerCapture(e.pointerId);});
+bar.addEventListener('pointermove',e=>{if(drag)barSeek(e);});
+bar.addEventListener('pointerup',()=>drag=false);
+
+document.getElementById('ar').onclick=e=>{
+  ar = ar==='9:16'?'16:9':'9:16'; e.target.textContent=ar;
+  for(const k in cache) delete cache[k];      // tiles are resolution-tied
+  resize();
+};
+document.getElementById('slate').onclick=e=>{
+  slateOn=!slateOn;e.target.classList.toggle('on',slateOn);frame(T);};
+
+addEventListener('keydown',e=>{
+  if(e.code==='Space'){e.preventDefault();setPlay(!playing);}
+  else if(e.key==='ArrowRight')seek(T+1);
+  else if(e.key==='ArrowLeft')seek(T-1);
+  else if(e.key>='1'&&e.key<='8')seek(SHOTS[+e.key-1].t0);
+  else if(e.key==='s')document.getElementById('slate').click();
+  else if(e.key==='m')document.getElementById('snd').click();
+  else if(e.key==='h'){document.getElementById('hud').classList.toggle('hide');
+    document.getElementById('note').classList.toggle('hide');}
+});
+
+/* ── AUDIO: low drone + one hit ─────────────────────────────────── */
+let AC=null, drone=null, sndOn=false;
+document.getElementById('snd').onclick=e=>{
+  sndOn=!sndOn;e.target.textContent=sndOn?'sound on':'sound off';
+  e.target.classList.toggle('on',sndOn);
+  if(sndOn&&playing)startAudio(); else stopAudio();
+};
+function startAudio(){
+  if(!sndOn||drone) return;
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume();
+  const out=AC.createGain();out.gain.value=0;out.connect(AC.destination);
+  out.gain.linearRampToValueAtTime(.22,AC.currentTime+3);
+  const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=220;lp.Q.value=.7;
+  lp.connect(out);
+  const oscs=[55,55.4,82.5,110].map((f,i)=>{
+    const o=AC.createOscillator();o.type=i>1?'sine':'sawtooth';o.frequency.value=f;
+    const g2=AC.createGain();g2.gain.value=i>1?.16:.09;o.connect(g2);g2.connect(lp);o.start();
+    return o;});
+  // room air
+  const buf=AC.createBuffer(1,AC.sampleRate*3,AC.sampleRate);
+  const ch=buf.getChannelData(0);let lastN=0;
+  for(let i=0;i<ch.length;i++){lastN=(lastN+(Math.random()*2-1)*.02)*.996;ch[i]=lastN;}
+  const air=AC.createBufferSource();air.buffer=buf;air.loop=true;
+  const ag=AC.createGain();ag.gain.value=1.6;air.connect(ag);ag.connect(out);air.start();
+  drone={out,oscs,air};
+}
+function stopAudio(){
+  if(!drone) return;
+  const {out,oscs,air}=drone;drone=null;
+  out.gain.cancelScheduledValues(AC.currentTime);
+  out.gain.linearRampToValueAtTime(0,AC.currentTime+.4);
+  setTimeout(()=>{oscs.forEach(o=>o.stop());air.stop();},600);
+}
+function hit(){
+  if(!sndOn||!AC) return;
+  const t=AC.currentTime;
+  // low thump
+  const o=AC.createOscillator();o.type='sine';
+  o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(34,t+.7);
+  const g2=AC.createGain();g2.gain.setValueAtTime(.9,t);
+  g2.gain.exponentialRampToValueAtTime(.001,t+1.6);
+  o.connect(g2);g2.connect(AC.destination);o.start(t);o.stop(t+1.7);
+  // metallic crack
+  const n=AC.createBuffer(1,AC.sampleRate*1.2,AC.sampleRate),d=n.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);
+  const s=AC.createBufferSource();s.buffer=n;
+  const bp=AC.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2400;bp.Q.value=1.6;
+  const g3=AC.createGain();g3.gain.setValueAtTime(.5,t);
+  g3.gain.exponentialRampToValueAtTime(.001,t+1.1);
+  s.connect(bp);bp.connect(g3);g3.connect(AC.destination);s.start(t);
+}
+
+/* ── RECORD → .webm (convert to mp4 with ffmpeg if you want) ────── */
+let mr=null;
+document.getElementById('rec').onclick=e=>{
+  if(mr){mr.stop();return;}
+  const stream=cv.captureStream(30);
+  if(sndOn&&AC){/* audio is on destination; canvas stream is video-only */}
+  const chunks=[];
+  mr=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9',videoBitsPerSecond:12e6});
+  mr.ondataavailable=ev=>chunks.push(ev.data);
+  mr.onstop=()=>{
+    const blob=new Blob(chunks,{type:'video/webm'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=`loud-room_${ar.replace(':','x')}.webm`;a.click();
+    mr=null;e.target.textContent='record';e.target.classList.remove('live');
+  };
+  mr.start();e.target.textContent='stop rec';e.target.classList.add('live');
+  seek(0);setPlay(true);
+  setTimeout(()=>{if(mr)mr.stop();},(TOTAL+.6)*1000);
+};
+
+/* ── embed wiring ───────────────────────────────────────────────── */
+function tellParent(){
+  if(EMBED && parent!==window)
+    parent.postMessage({alp:'state', sound:sndOn, playing, t:T, shot:
+      (SHOTS.find(s=>T>=s.t0&&T<s.t1)||SHOTS[0]).n},'*');
+}
+if(EMBED){
+  document.getElementById('hud').classList.add('hide');
+  document.getElementById('note').classList.add('hide');
+  document.getElementById('stage').style.padding='0';
+  document.documentElement.style.cursor='none';
+  cv.style.boxShadow='none';
+  // the base stylesheet caps the canvas at max-width/height:100%, which in
+  // fill mode clamps the taller dimension and stretches the frame ~3%
+  cv.style.maxWidth='none'; cv.style.maxHeight='none';
+  slateOn=false;
+  // a click in here IS a user gesture — this is the only place audio can arm
+  cv.addEventListener('click',()=>{document.getElementById('snd').click();tellParent();});
+  /* Relay the pointer out to the parent. An iframe swallows pointer events, so
+     the host page's custom cursor would otherwise freeze at the frame edge
+     while our own cursor:none leaves nothing visible. rAF-throttled. */
+  if(parent!==window){
+    // time-throttled, NOT rAF-throttled: rAF stops in a background tab and
+    // input relay must keep working regardless of the render loop
+    let lastMove=0;
+    addEventListener('pointermove',e=>{
+      const now=performance.now();
+      if(now-lastMove<8) return;
+      lastMove=now;
+      parent.postMessage({alp:'cursor',x:e.clientX,y:e.clientY,over:true},'*');
+    },{passive:true});
+    const leave=()=>parent.postMessage({alp:'cursor',over:false},'*');
+    addEventListener('pointerleave',leave);
+    document.addEventListener('mouseleave',leave);
+    addEventListener('blur',leave);
+  }
+  addEventListener('message',e=>{
+    const d=e.data||{};
+    if(d.alp==='play') setPlay(!!d.on);
+    if(d.alp==='seek') seek(+d.t||0);
+    if(d.alp==='ping') tellParent();
+  });
+  setInterval(tellParent,900);
+}
+
+resize();sync();
+if(EMBED) setPlay(true);
+</script>
